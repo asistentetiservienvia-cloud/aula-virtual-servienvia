@@ -2,7 +2,6 @@
   "name": "aula-virtual-servienvia",
   "version": "1.0.0",
   "description": "API REST del Aula Virtual de Servienvia \u2014 autenticaci\u00f3n, gesti\u00f3n de usuarios y cat\u00e1logo de cursos.",
-  "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
     "demo": "node src/demoServer.js",
