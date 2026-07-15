@@ -459,8 +459,8 @@ let tT;
 function toast(msg){ const t=document.getElementById('toast'); document.getElementById('toast-txt').textContent=msg; t.classList.add('show'); clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('show'),2600); }
 
 // ---- Init ----
-document.getElementById('h-av').textContent = iniciales(SESION.nombre);
-document.getElementById('h-name').textContent = SESION.nombre.split(' ')[0];
+const hAv = document.getElementById('h-av'); if (hAv) hAv.textContent = iniciales(SESION.nombre);
+const hName = document.getElementById('h-name'); if (hName) hName.textContent = SESION.nombre.split(' ')[0];
 document.getElementById('saludo').textContent = `Hola, ${SESION.nombre.split(' ')[0]}`;
 cargarActividad();
 cargarContadores().then(cargarCursos);
