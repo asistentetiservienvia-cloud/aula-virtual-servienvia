@@ -1,5 +1,5 @@
 // Punto de entrada: arranca el servidor HTTP.
-const { crearApp } = require('./app');
+const { crearApp } = require('./appConfig');
 const { config } = require('./config');
 const db = require('./db');
 

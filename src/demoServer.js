@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { newDb } = require('pg-mem');
 const db = require('./db');
-const { crearApp } = require('./app');
+const { crearApp } = require('./appConfig');
 const { config } = require('./config');
 
 const mem = newDb();

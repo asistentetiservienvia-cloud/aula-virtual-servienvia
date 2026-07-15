@@ -6,7 +6,7 @@ const { newDb } = require('pg-mem');
 const request = require('supertest');
 
 const db = require('../src/db');
-const { crearApp } = require('../src/app');
+const { crearApp } = require('../src/appConfig');
 
 // --- utilidades de aserción ---
 let pass = 0, fail = 0;

@@ -3,7 +3,7 @@
 // La instancia de Express se crea una vez y se reusa entre invocaciones "warm"
 // (el pool de PostgreSQL también se reusa gracias al singleton en src/db.js).
 
-const { crearApp } = require('../src/app');
+const { crearApp } = require('../src/appConfig');
 const { config } = require('../src/config');
 
 // Aviso claro si el secreto por defecto llega a producción.
