@@ -343,25 +343,6 @@ const grads=['linear-gradient(135deg,#5b34d6,#9b6dff)','linear-gradient(135deg,#
 
 let categoriaActiva = '';
 
-function setupHeader(){
-  const cont = document.getElementById('header-auth');
-  if (SESION) {
-    const ensenaBtn = document.querySelector('.nav-link.hide');
-    if (ensenaBtn) ensenaBtn.style.display = 'none';
-    const ini = SESION.nombre.trim().split(/\s+/).map(p=>p[0]).slice(0,2).join('').toUpperCase();
-    cont.innerHTML = `<div class="greet" onclick="irAPanel()">
-      <div class="av">${ini}</div>
-      <div class="txt"><small>Hola de nuevo,</small><b>${SESION.nombre.split(' ')[0]}</b></div>
-    </div>`;
-  } else {
-    cont.innerHTML = `<button class="btn btn-solid" onclick="location.href='/login.html'">Iniciar sesión</button>`;
-  }
-}
-function irAPanel(){
-  if (SESION && SESION.rol === 'administrador') location.href = '/admin.html';
-  else location.href = '/dashboard.html';
-}
-
 async function setupCats(){
   try {
     const resp = await fetch(API + '/api/categorias');
@@ -489,7 +470,6 @@ carEl.addEventListener('touchend', e => {
   if(dx > 50) go(-1, true); else if(dx < -50) go(1, true);
 });
 
-setupHeader();
 (async () => {
   await setupCats();
   cargarCursos();
