@@ -77,11 +77,13 @@ header{position:sticky;top:0;z-index:50;background:rgba(251,250,255,.85);backdro
 .arrow.right{right:24px;}
 
 @media(max-width: 900px){
-  .carousel { height: auto; min-height: 650px; }
-  .slide { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
-  .slide-content { padding: 40px 6% 20px; text-align: center; align-items: center; order: 1; transform: translateY(20px); }
-  .slide-img { order: 2; height: 320px; padding: 0 20px 30px; }
-  .slide p { margin-left: auto; margin-right: auto; }
+  .carousel { height: auto; min-height: auto; }
+  .slide { grid-template-columns: 1fr; grid-template-rows: auto auto; padding-bottom: 40px; }
+  .slide-content { padding: 10px 6% 30px; text-align: center; align-items: center; order: 2; transform: translateY(20px); }
+  .slide-img { order: 1; height: 280px; padding: 30px 20px 0; }
+  .slide p { margin-left: auto; margin-right: auto; font-size: 15px; margin-bottom: 20px; }
+  .slide h1 { font-size: 28px; }
+  .arrow { display: none; }
 }
 
 section.block{padding:54px 0}
@@ -484,6 +486,12 @@ function resetTimer() {
   clearInterval(carTimer);
   carTimer = setInterval(()=>go(1), 7000);
 }
+let tx=0; const carEl = document.getElementById('car');
+carEl.addEventListener('touchstart', e => tx = e.changedTouches[0].screenX);
+carEl.addEventListener('touchend', e => {
+  let dx = e.changedTouches[0].screenX - tx;
+  if(dx > 50) go(-1, true); else if(dx < -50) go(1, true);
+});
 
 setupHeader();
 (async () => {
