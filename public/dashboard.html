@@ -354,7 +354,7 @@ function tarjeta(c, i){
   const pct = c.progreso || 0;
   const done = pct === 100;
   return `<div class="card">
-    <div class="thumb" style="background:${grads[(c.curso_id-1)%grads.length]}">
+    <div class="thumb" style="background:${c.portada_url ? `url('${c.portada_url}') center/cover` : grads[(c.curso_id-1)%grads.length]}">
       <span class="tag">${c.categoria||'Curso'}</span>
       <button class="fav ${c.favorito?'on':''}" title="Favorito" onclick="toggleFav(${c.id}, ${!c.favorito})">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="${c.favorito?'currentColor':'none'}" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7z"/></svg>

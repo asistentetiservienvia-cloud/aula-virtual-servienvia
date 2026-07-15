@@ -333,7 +333,7 @@ async function cargarCursos(params = {}){
       const rating = Number(c.calificacion_promedio || 0).toFixed(1);
       const valoraciones = (c.num_valoraciones||0).toLocaleString('es');
       return `<div class="course" onclick="location.href='/reproductor.html?curso=${c.id}'">
-        <div class="thumb" style="background:${grads[i%grads.length]}"><span class="tag">${c.categoria||'Curso'}</span></div>
+        <div class="thumb" style="background:${c.portada_url ? `url('${c.portada_url}') center/cover` : grads[i%grads.length]}"><span class="tag">${c.categoria||'Curso'}</span></div>
         <div class="body">
           <h3>${c.titulo}</h3>
           <div class="tutor">${c.instructor}</div>
