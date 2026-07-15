@@ -4,8 +4,8 @@
 // (el pool de PostgreSQL también se reusa gracias al singleton en src/db.js).
 
 const express = require('express'); // Truco para que Vercel detecte la app Express
-const { crearApp } = require('../src/appConfig');
-const { config } = require('../src/config');
+const { crearApp } = require('./src/appConfig');
+const { config } = require('./src/config');
 
 // Aviso claro si el secreto por defecto llega a producción.
 if (config.jwtSecret === 'cambia-esto-en-produccion' && config.nodeEnv === 'production') {
