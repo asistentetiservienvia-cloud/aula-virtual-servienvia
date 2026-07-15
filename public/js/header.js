@@ -29,7 +29,32 @@ document.addEventListener('DOMContentLoaded', () => {
   if(toggle && nav) {
     toggle.addEventListener('click', () => {
       nav.classList.toggle('open');
+      const wrapper = document.querySelector('.hd-dropdown-wrapper');
+      if(wrapper) wrapper.classList.toggle('open');
     });
+  }
+
+  // Cargar categorías dinámicamente en el dropdown
+  const catDrop = document.getElementById('hd-cat-dropdown');
+  if(catDrop) {
+    fetch(window.location.origin + '/api/categorias')
+      .then(res => res.json())
+      .then(data => {
+        const cats = data.categorias || [];
+        if(cats.length === 0) {
+          catDrop.innerHTML = '<div style="padding:10px; color:#6a6f73; font-size:13px; text-align:center">No hay categorías</div>';
+        } else {
+          catDrop.innerHTML = cats.map(c => `
+            <a href="/?cat=${c.id}#cursos" class="hd-drop-item">
+              <span class="hd-drop-icon">${c.icono || '📚'}</span>
+              ${c.nombre}
+            </a>
+          `).join('');
+        }
+      })
+      .catch(() => {
+        catDrop.innerHTML = '<div style="padding:10px; color:#ff6b6b; font-size:13px; text-align:center">Error al cargar</div>';
+      });
   }
 });
 
