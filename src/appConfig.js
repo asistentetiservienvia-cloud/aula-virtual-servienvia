@@ -29,7 +29,9 @@ function crearApp() {
   app.use('/api/inscripciones', inscripcionesRoutes);
   app.use('/api/actividad', actividadRoutes);
   app.use('/api/admin/cursos', adminCursosRoutes);
+  app.use('/api/admin/categorias', require('./routes/adminCategorias'));
   app.use('/api/comunidad', comunidadRoutes);
+  app.use('/api/categorias', require('./routes/categorias'));
 
   // 404 — JSON para rutas de API; cualquier otra ruta cae al SPA (index.html)
   app.use((req, res) => {

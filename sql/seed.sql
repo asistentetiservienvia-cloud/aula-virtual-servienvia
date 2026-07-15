@@ -6,14 +6,14 @@
 -- ============================================================
 
 INSERT INTO categorias (nombre, icono) VALUES
-  ('Programación', 'code'),
-  ('Diseño', 'palette'),
-  ('Negocios', 'briefcase'),
-  ('Marketing', 'megaphone'),
-  ('Ciencia de Datos', 'robot'),
-  ('Idiomas', 'language'),
-  ('Foto y Video', 'camera'),
-  ('Música', 'music');
+  ('Programación', '💻'),
+  ('Diseño', '🎨'),
+  ('Negocios', '💼'),
+  ('Marketing', '📈'),
+  ('Ciencia de Datos', '📊'),
+  ('Idiomas', '🌐'),
+  ('Foto y Video', '📷'),
+  ('Música', '🎵');
 
 -- ----------- USUARIOS -----------
 -- El administrador (id=1) crea al resto. Hash bcrypt de 'servienvia2026'.
