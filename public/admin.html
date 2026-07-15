@@ -226,6 +226,7 @@ tbody tr:hover{background:#faf8ff}
     <div id="view-categorias" style="display:none">
       <div class="topline">
         <h1>Gestión de categorías</h1>
+        <button class="btn btn-ghost" style="margin-right:10px" onclick="fixEmojis()" id="btn-fix">✨ Autocorregir Emojis Viejos</button>
         <button class="btn btn-solid" onclick="openCrearCategoria()">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
           Nueva categoría
@@ -521,6 +522,21 @@ async function eliminarCategoria(id) {
     await cargarCategorias(true);
   } catch(e) { showToast(e.message, true); }
 }
+
+async function fixEmojis() {
+  const btn = document.getElementById('btn-fix');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Corrigiendo...';
+  try {
+    const res = await api('POST', '/api/admin/categorias/fix-emojis');
+    showToast(res.mensaje);
+    await cargarCategorias(true);
+    btn.style.display = 'none'; // Hide after success
+  } catch(e) {
+    showToast(e.message, true);
+    btn.disabled = false; btn.innerHTML = '✨ Autocorregir Emojis Viejos';
+  }
+}
+
 
 
 // --- GESTIÓN DE CURSOS ---

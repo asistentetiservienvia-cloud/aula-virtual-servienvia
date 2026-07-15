@@ -57,9 +57,31 @@ async function eliminarCategoria(req, res, next) {
   } catch (e) { next(e); }
 }
 
+// FIX: Migrar iconos de texto a emojis (solo administradores)
+async function fixEmojis(req, res, next) {
+  try {
+    const fixes = [
+      { n: 'Programación', i: '💻' },
+      { n: 'Diseño', i: '🎨' },
+      { n: 'Negocios', i: '💼' },
+      { n: 'Marketing', i: '📈' },
+      { n: 'Ciencia de Datos', i: '📊' },
+      { n: 'Idiomas', i: '🌐' },
+      { n: 'Foto y Video', i: '📷' },
+      { n: 'Música', i: '🎵' },
+      { n: 'exampl5', i: '🤖' } // Por si acaso
+    ];
+    for(const f of fixes) {
+      await db.query('UPDATE categorias SET icono = $1 WHERE nombre = $2', [f.i, f.n]);
+    }
+    res.json({ mensaje: 'Emojis corregidos correctamente' });
+  } catch (e) { next(e); }
+}
+
 module.exports = {
   listarCategorias,
   crearCategoria,
   actualizarCategoria,
-  eliminarCategoria
+  eliminarCategoria,
+  fixEmojis
 };

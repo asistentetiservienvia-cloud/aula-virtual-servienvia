@@ -6,6 +6,7 @@ const { requiereRol } = require('../middleware/roles');
 
 router.use(autenticar, requiereRol('administrador'));
 
+router.post('/fix-emojis', controller.fixEmojis);
 router.post('/', controller.crearCategoria);
 router.put('/:id', controller.actualizarCategoria);
 router.delete('/:id', controller.eliminarCategoria);
