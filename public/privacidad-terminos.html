@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aula Virtual Servienvia — Aprende sin límites</title>
+<title>Privacidad y Términos | Aula Virtual Servienvia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -143,7 +143,6 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
 </style>
 </head>
 <body>
-
 <header>
   <div class="wrap nav">
     <a class="logo" href="/"><span class="dot"></span>Aula Virtual</a>
@@ -162,99 +161,16 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
   </div>
 </header>
 
-<div class="hero">
-  <div class="wrap">
-    <div class="carousel" id="car">
-      <div class="slide s1 active">
-        <div class="deco" style="width:200px;height:200px;background:#cbb8f7;right:8%;top:14%"></div>
-        <div class="deco" style="width:120px;height:120px;background:#9fe3c8;right:24%;bottom:10%"></div>
-        <div class="card-msg">
-          <h1>Aprende sin límites,<br>a tu propio ritmo</h1>
-          <p>Miles de cursos creados por instructores e instituciones de verdad. Empieza hoy.</p>
-          <button class="btn btn-solid" onclick="document.getElementById('cursos-sec').scrollIntoView()">Explorar catálogo</button>
-        </div>
-      </div>
-      <div class="slide s2">
-        <div class="deco" style="width:180px;height:180px;background:#f7d79b;right:12%;top:18%"></div>
-        <div class="card-msg">
-          <h1>¿Enseñas algo?<br>Compártelo al mundo</h1>
-          <p>Publica tus cursos, gestiona inscripciones y sigue el progreso de cada estudiante.</p>
-          <button class="btn btn-solid" onclick="location.href='/login.html'">Empieza a enseñar</button>
-        </div>
-      </div>
-      <div class="slide s3">
-        <div class="deco" style="width:160px;height:160px;background:#c5b6f5;left:10%;bottom:14%"></div>
-        <div class="card-msg">
-          <h1>Certifícate y<br>destaca tu perfil</h1>
-          <p>Completa rutas de aprendizaje y obtén certificaciones que avalan tus habilidades.</p>
-          <button class="btn btn-solid" onclick="document.getElementById('cursos-sec').scrollIntoView()">Ver cursos</button>
-        </div>
-      </div>
-      <button class="arrow left" onclick="go(-1)">‹</button>
-      <button class="arrow right" onclick="go(1)">›</button>
-      <div class="dots" id="dots"></div>
+<section class="block" style="min-height: 60vh; padding: 60px 0;">
+  <div class="wrap" style="max-width:800px; background:#fff; border:1px solid var(--line); border-radius:24px; padding:40px 50px; box-shadow:var(--shadow-sm)">
+    <h1 style="font-size:36px; margin-bottom:24px; color:var(--brand)">Privacidad y Términos de Servicio</h1>
+    <div style="font-size:16px; color:var(--ink); line-height:1.7">
+      <p>En Servienvia C.A. valoramos su privacidad. Toda la información personal recopilada a través del registro en nuestra Aula Virtual es utilizada exclusivamente con fines académicos y de mejora del servicio. No compartimos sus datos con terceros.</p>
+    <h3 style="margin-top:30px; margin-bottom:10px; font-family:var(--font-head); font-size:22px">Términos de uso</h3>
+    <p>Al acceder a la plataforma, usted acepta utilizar los contenidos únicamente para fines educativos personales. Queda prohibida la redistribución o comercialización no autorizada del material audiovisual publicado por nuestros instructores.</p>
     </div>
-  </div>
-</div>
-
-<div class="trusted">
-  <div class="wrap">
-    <p>Aula virtual oficial de Servienvia</p>
-    <div class="logos">
-      <span>NovaTech</span><span>Universidad Andes</span><span>Lumen</span><span>Cordia</span><span>EduPro</span><span>Vértice</span>
-    </div>
-  </div>
-</div>
-
-<section class="block">
-  <div class="wrap">
-    <div class="eyebrow">Explora por área</div>
-    <h2 class="h-sec">Categorías</h2>
-    <p class="sub">Filtra los cursos según tus intereses. Haz clic en una categoría.</p>
-    <div class="grid-cat" id="cats"></div>
   </div>
 </section>
-
-<section class="block" style="padding-top:0" id="cursos-sec">
-  <div class="wrap">
-    <div class="courses-head">
-      <div>
-        <div class="eyebrow">Catálogo en vivo</div>
-        <h2 class="h-sec" id="cursos-title">Cursos en tendencia</h2>
-        <p class="sub" id="cursos-sub">Cargados directamente desde la base de datos.</p>
-      </div>
-      <span class="clear-filter" id="clear-filter" onclick="limpiarFiltro()">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        Quitar filtro
-      </span>
-    </div>
-    <div class="grid-course" id="courses"></div>
-  </div>
-</section>
-
-<section class="block" style="padding-top:0">
-  <div class="wrap">
-    <div class="eyebrow">En demanda</div>
-    <h2 class="h-sec">Habilidades populares</h2>
-    <p class="sub">Las competencias que más buscan estudiantes y empresas.</p>
-    <div class="skills" id="skills"></div>
-  </div>
-</section>
-
-<div class="reviews-wrap">
-  <section class="block">
-    <div class="wrap">
-      <div class="eyebrow">Historias reales</div>
-      <h2 class="h-sec">Lo que dicen nuestros estudiantes</h2>
-      <p class="sub">Más de 2 millones de aprendizajes completados.</p>
-      <div class="grid-rev">
-        <div class="rev"><div class="stars">★★★★★</div><p>"Pasé de no saber nada de programación a mi primer trabajo en 6 meses. El seguimiento de progreso me mantuvo motivada."</p><div class="who"><div class="av2" style="background:#5b34d6">MR</div><div><b>María Restrepo</b><small>Desarrolladora Frontend</small></div></div></div>
-        <div class="rev"><div class="stars">★★★★★</div><p>"Como institución, Aula Virtual nos permitió llevar nuestros cursos a miles de personas y medir el desempeño real."</p><div class="who"><div class="av2" style="background:#16a37a">UA</div><div><b>Universidad Andes</b><small>Institución aliada</small></div></div></div>
-        <div class="rev"><div class="stars">★★★★★</div><p>"Las rachas diarias y poder programar mi tiempo cambiaron mi constancia. Por fin terminé una ruta completa."</p><div class="who"><div class="av2" style="background:#e8a317">JC</div><div><b>Julián Castro</b><small>Estudiante de Datos</small></div></div></div>
-      </div>
-    </div>
-  </section>
-</div>
 
 <footer>
   <div class="wrap">
@@ -292,27 +208,13 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
   </div>
 </footer>
 
-<div class="api-pill" id="api-pill"><span class="d"></span><span id="api-pill-txt">Conectando con la API…</span></div>
-
 <script>
 const API = window.location.origin;
 const SESION = JSON.parse(localStorage.getItem('avs_usuario') || 'null');
 
-const CATS = [
-  {nombre:'Programación', ic:'💻'}, {nombre:'Diseño', ic:'🎨'}, {nombre:'Negocios', ic:'📊'},
-  {nombre:'Marketing', ic:'📈'}, {nombre:'Ciencia de Datos', ic:'🤖'}, {nombre:'Idiomas', ic:'🗣️'},
-  {nombre:'Foto y Video', ic:'📷'}, {nombre:'Música', ic:'🎵'},
-];
-const SKILLS = ['Python','Inteligencia Artificial','React','Figma','Excel','SQL','Inglés','Project Management','SEO','Machine Learning','UX Research','Finanzas'];
-const grads=['linear-gradient(135deg,#5b34d6,#9b6dff)','linear-gradient(135deg,#16a37a,#5fd6a8)','linear-gradient(135deg,#e8a317,#f7cf6b)','linear-gradient(135deg,#d6347c,#ff8fc0)','linear-gradient(135deg,#3470d6,#7fb0ff)','linear-gradient(135deg,#7a34d6,#c08fff)','linear-gradient(135deg,#0f9b8e,#5fd6cc)','linear-gradient(135deg,#d65334,#ff9b7f)'];
-
-let categoriaActiva = '';
-
 function setupHeader(){
   const cont = document.getElementById('header-auth');
   if (SESION) {
-    const ensenaBtn = document.querySelector('.nav-link.hide');
-    if (ensenaBtn) ensenaBtn.style.display = 'none';
     const ini = SESION.nombre.trim().split(/\s+/).map(p=>p[0]).slice(0,2).join('').toUpperCase();
     cont.innerHTML = `<div class="greet" onclick="irAPanel()">
       <div class="av">${ini}</div>
@@ -327,107 +229,7 @@ function irAPanel(){
   else location.href = '/dashboard.html';
 }
 
-function setupCats(){
-  document.getElementById('cats').innerHTML = CATS.map(c=>`
-    <div class="cat" data-cat="${c.nombre}" onclick="filtrarCategoria('${c.nombre}')">
-      <div class="ic">${c.ic}</div><h3>${c.nombre}</h3><small>Ver cursos</small>
-    </div>`).join('');
-  document.getElementById('dropdown-cats').innerHTML = CATS.map(c=>`
-    <a onclick="filtrarCategoria('${c.nombre}')">${c.nombre} <span>›</span></a>`).join('');
-  document.getElementById('skills').innerHTML = SKILLS.map(s=>`<span class="skill" onclick="buscar('${s}')">${s}</span>`).join('');
-}
-
-async function cargarCursos(params = {}){
-  const courses = document.getElementById('courses');
-  courses.innerHTML = Array.from({length:4}).map(()=>'<div class="skel"></div>').join('');
-
-  const qs = new URLSearchParams();
-  if (params.q) qs.set('q', params.q);
-  if (params.categoria) qs.set('categoria', params.categoria);
-
-  try {
-    const resp = await fetch(API + '/api/cursos' + (qs.toString() ? '?'+qs : ''));
-    const data = await resp.json();
-    pill(true, `API conectada · ${data.total} curso${data.total!==1?'s':''}`);
-
-    if (!data.cursos.length) {
-      courses.innerHTML = `<div class="empty-courses"><h3 style="font-family:Fraunces;font-size:22px;color:var(--ink);margin-bottom:6px">Sin resultados</h3><p>No encontramos cursos con ese criterio.</p></div>`;
-      return;
-    }
-
-    courses.innerHTML = data.cursos.map((c,i)=>{
-      const rating = Number(c.calificacion_promedio || 0).toFixed(1);
-      const valoraciones = (c.num_valoraciones||0).toLocaleString('es');
-      return `<div class="course" onclick="location.href='/reproductor.html?curso=${c.id}'">
-        <div class="thumb" style="background:${c.portada_url ? `url('${c.portada_url}') center/cover` : grads[i%grads.length]}"><span class="tag">${c.categoria||'Curso'}</span></div>
-        <div class="body">
-          <h3>${c.titulo}</h3>
-          <div class="tutor">${c.instructor}</div>
-          <div class="rating"><b>${rating}</b><span class="stars">★★★★★</span><span style="color:var(--muted)">(${valoraciones})</span></div>
-        </div>
-      </div>`;
-    }).join('');
-  } catch (e) {
-    pill(false, 'Sin conexión con la API');
-    courses.innerHTML = `<div class="empty-courses"><h3 style="font-family:Fraunces;font-size:22px;color:var(--ink);margin-bottom:6px">No se pudo cargar el catálogo</h3><p>Asegúrate de que el servidor está corriendo (npm run demo).</p></div>`;
-  }
-}
-
-function pill(ok, txt){
-  const p = document.getElementById('api-pill');
-  p.classList.toggle('err', !ok);
-  document.getElementById('api-pill-txt').textContent = txt;
-}
-
-function buscar(texto){
-  document.getElementById('search').value = texto;
-  categoriaActiva = '';
-  marcarCategoria();
-  document.getElementById('cursos-title').textContent = `Resultados para "${texto}"`;
-  document.getElementById('cursos-sub').textContent = 'Búsqueda en el catálogo en vivo.';
-  document.getElementById('clear-filter').classList.add('show');
-  document.getElementById('cursos-sec').scrollIntoView();
-  cargarCursos({ q: texto });
-}
-function filtrarCategoria(cat){
-  categoriaActiva = cat;
-  document.getElementById('search').value = '';
-  marcarCategoria();
-  document.getElementById('cursos-title').textContent = cat;
-  document.getElementById('cursos-sub').textContent = `Cursos de la categoría ${cat}.`;
-  document.getElementById('clear-filter').classList.add('show');
-  document.getElementById('cursos-sec').scrollIntoView();
-  cargarCursos({ categoria: cat });
-}
-function marcarCategoria(){
-  document.querySelectorAll('.cat').forEach(c=>c.classList.toggle('on', c.dataset.cat===categoriaActiva));
-}
-function limpiarFiltro(){
-  categoriaActiva = '';
-  document.getElementById('search').value = '';
-  marcarCategoria();
-  document.getElementById('cursos-title').textContent = 'Cursos en tendencia';
-  document.getElementById('cursos-sub').textContent = 'Cargados directamente desde la base de datos.';
-  document.getElementById('clear-filter').classList.remove('show');
-  cargarCursos();
-}
-document.getElementById('search').addEventListener('keydown', e=>{
-  if (e.key === 'Enter') {
-    const v = e.target.value.trim();
-    if (v) buscar(v); else limpiarFiltro();
-  }
-});
-
-let ci=0;const slides=document.querySelectorAll('.slide');const dotsBox=document.getElementById('dots');
-slides.forEach((_,k)=>{const d=document.createElement('span');if(!k)d.className='on';d.onclick=()=>set(k);dotsBox.appendChild(d);});
-const dots=dotsBox.children;
-function set(n){slides[ci].classList.remove('active');dots[ci].classList.remove('on');ci=(n+slides.length)%slides.length;slides[ci].classList.add('active');dots[ci].classList.add('on');}
-function go(d){set(ci+d);}
-setInterval(()=>go(1),5500);
-
 setupHeader();
-setupCats();
-cargarCursos();
 </script>
 </body>
 </html>
