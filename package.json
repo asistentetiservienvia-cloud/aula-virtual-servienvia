@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "API REST del Aula Virtual de Servienvia \u2014 autenticaci\u00f3n, gesti\u00f3n de usuarios y cat\u00e1logo de cursos.",
   "scripts": {
-    "start": "node src/server.js",
-    "demo": "node src/demoServer.js",
-    "dev": "nodemon src/server.js",
+    "start": "node src/startServer.js",
+    "demo": "node src/startDemoServer.js",
+    "dev": "nodemon src/startServer.js",
     "test": "node test/run.js",
     "db:init": "node scripts/initDb.js"
   },
