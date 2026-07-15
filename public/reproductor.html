@@ -248,7 +248,8 @@ async function init(){
     curso = d.curso;
     lecciones = [];
     curso.secciones.forEach(sec => sec.lecciones.forEach(l => lecciones.push({ ...l, seccion: sec.titulo })));
-    document.getElementById('ctitle').textContent = curso.titulo;
+    const ctitleEl = document.getElementById('ctitle');
+    if (ctitleEl) ctitleEl.textContent = curso.titulo;
 
     if (!TOKEN || !SESION) { render(false); return; } // vista previa sin sesión
 
@@ -446,9 +447,9 @@ function actualizarProgreso(){
   const done = pct === 100;
   const plBar = document.getElementById('pl-bar'); if (plBar){ plBar.style.width = pct+'%'; plBar.classList.toggle('done', done); }
   const plTxt = document.getElementById('pl-txt'); if (plTxt) plTxt.textContent = `${hechas}/${total}`;
-  const hp = document.getElementById('hprog'); hp.style.visibility = (TOKEN && INSCRIPCION_ID) ? 'visible' : 'hidden';
-  document.getElementById('hprog-pct').textContent = pct+'%';
-  document.getElementById('hprog-bar').style.width = pct+'%';
+  const hp = document.getElementById('hprog'); if (hp) hp.style.visibility = (TOKEN && INSCRIPCION_ID) ? 'visible' : 'hidden';
+  const hprogPct = document.getElementById('hprog-pct'); if (hprogPct) hprogPct.textContent = pct+'%';
+  const hprogBar = document.getElementById('hprog-bar'); if (hprogBar) hprogBar.style.width = pct+'%';
 }
 
 
