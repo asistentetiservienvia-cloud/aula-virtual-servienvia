@@ -44,7 +44,7 @@ const pool = new Pool({ connectionString: conn, ssl: usaSsl ? { rejectUnauthoriz
     }
 
     console.log('\n¡Base de datos inicializada con éxito!');
-    console.log('Cuentas demo (contraseña: servienvia2026): admin@servienvia.com, maria@servienvia.com, carlos@servienvia.com');
+    console.log('Cuentas demo (contraseña: servienvia2026): admin@servienvia.com, valentina@servienvia.com, carlos@servienvia.com');
   } catch (e) {
     console.error('\nERROR al inicializar la base de datos:', e.message);
     console.error('Si las tablas ya existían, primero vacía la base de datos o usa una nueva.');

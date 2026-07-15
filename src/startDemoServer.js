@@ -32,8 +32,8 @@ app.listen(config.port, () => {
   console.log(`  Servidor:  http://localhost:${config.port}`);
   console.log('');
   console.log('  Cuentas demo (contraseña: servienvia2026):');
-  console.log('    admin@servienvia.com   (administrador)');
-  console.log('    maria@servienvia.com   (estudiante)');
-  console.log('    carlos@servienvia.com  (instructor)');
+  console.log('    admin@servienvia.com       (administrador)');
+  console.log('    valentina@servienvia.com   (estudiante)');
+  console.log('    carlos@servienvia.com      (instructor)');
   console.log('====================================================');
 });

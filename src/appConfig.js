@@ -23,13 +23,20 @@ function crearApp() {
   app.get('/api/health', (req, res) => res.json({ ok: true, servicio: 'Aula Virtual Servienvia API' }));
 
   // Migración en caliente para Vercel
-  app.get('/api/dev/migrate-courses', async (req, res) => {
+  app.get('/api/dev/update-valentina', async (req, res) => {
     try {
       const db = require('./db');
+      
+      // Actualizar a Valentina Gómez
+      await db.query(`UPDATE usuarios SET nombre = 'Valentina Gómez', correo = 'valentina@servienvia.com' WHERE correo = 'maria@servienvia.com'`);
+
+      let msg = 'Usuario actualizado exitosamente a Valentina Gómez. ';
+
       // Revisar si ya existen las lecciones nuevas
       const check = await db.query('SELECT COUNT(*) as n FROM lecciones WHERE seccion_id >= 5');
       if (Number(check.rows[0].n) > 0) {
-        return res.json({ msg: 'El contenido ya había sido cargado previamente.' });
+        msg += 'El contenido de los cursos ya había sido cargado previamente.';
+        return res.json({ msg });
       }
 
       const sql = `

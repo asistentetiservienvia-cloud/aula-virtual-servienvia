@@ -19,7 +19,7 @@ INSERT INTO categorias (nombre, icono) VALUES
 -- El administrador (id=1) crea al resto. Hash bcrypt de 'servienvia2026'.
 INSERT INTO usuarios (rol, nombre, correo, contrasena_hash, profesion, intereses, creado_por) VALUES
   ('administrador', 'Admin Servienvia',     'admin@servienvia.com',  '$2a$10$ivvXhtnLv2MIKy6VWuk8W.l70zGEBSwVZBkDu80OUfdBfFydN84iy', 'Administrador de la plataforma', NULL, NULL),
-  ('estudiante',    'María Restrepo',     'maria@servienvia.com',  '$2a$10$ivvXhtnLv2MIKy6VWuk8W.l70zGEBSwVZBkDu80OUfdBfFydN84iy', 'Desarrolladora frontend en formación', 'JavaScript, UX, Ciencia de Datos', 1),
+  ('estudiante',    'Valentina Gómez',      'valentina@servienvia.com',  '$2a$10$ivvXhtnLv2MIKy6VWuk8W.l70zGEBSwVZBkDu80OUfdBfFydN84iy', 'Desarrolladora frontend en formación', 'JavaScript, UX, Ciencia de Datos', 1),
   ('instructor',    'Carlos Ruiz',        'carlos@servienvia.com', '$2a$10$ivvXhtnLv2MIKy6VWuk8W.l70zGEBSwVZBkDu80OUfdBfFydN84iy', 'Diseñador de producto y mentor', 'Diseño, UX', 1),
   ('instructor',    'Ana Gómez',          'ana@servienvia.com',    '$2a$10$ivvXhtnLv2MIKy6VWuk8W.l70zGEBSwVZBkDu80OUfdBfFydN84iy', 'Ingeniera de software', 'Python, backend', 1),
   ('institucion',   'Universidad Andes',  'andes@servienvia.com',  '$2a$10$ivvXhtnLv2MIKy6VWuk8W.l70zGEBSwVZBkDu80OUfdBfFydN84iy', 'Institución educativa aliada', 'Datos, ciencia', 1),
