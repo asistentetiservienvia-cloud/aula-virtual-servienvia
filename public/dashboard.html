@@ -385,7 +385,7 @@ function renderVacio(){
   }[tabActual] || {h:'Sin resultados', p:'Prueba con otros filtros.'};
   document.getElementById('grid').innerHTML = `<div class="state">
     <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2zM22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-    <h3>${msg.h}</h3><p>${msg.p}${msg.cta?' <a onclick="location.href=\\'/\\'">Ir al catálogo →</a>':''}</p></div>`;
+    <h3>${msg.h}</h3><p>${msg.p}${msg.cta?' <a href="/">Ir al catálogo →</a>':''}</p></div>`;
 }
 
 function aplicarFiltros(){ if (tabActual==='cursos') cargarCursos(); }

@@ -148,7 +148,17 @@ header .back:hover{background:rgba(255,255,255,.22)}
     <div class="trophy"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/></svg></div>
     <h2>¡Curso completado!</h2>
     <p id="cele-txt">Terminaste todas las lecciones. ¡Gran trabajo!</p>
-    <button class="btn btn-done" onclick="document.getElementById('cele').classList.remove('show')" style="margin:0 auto">Seguir aprendiendo</button>
+    
+    <div id="resena-box" style="margin:24px 0; padding:24px; background:#faf8ff; border-radius:16px; border:1px solid var(--line)">
+      <h4 style="margin-bottom:12px; font-family:inherit; font-weight:700">¿Qué te pareció el curso?</h4>
+      <div id="estrellas" style="font-size:32px; cursor:pointer; color:var(--line); margin-bottom:14px; user-select:none">
+        <span onclick="setEstrella(1)">★</span><span onclick="setEstrella(2)">★</span><span onclick="setEstrella(3)">★</span><span onclick="setEstrella(4)">★</span><span onclick="setEstrella(5)">★</span>
+      </div>
+      <textarea id="resena-txt" placeholder="Déjanos un comentario (opcional)" style="width:100%; padding:12px; border:1px solid var(--line); border-radius:8px; font-family:inherit; resize:vertical; display:none; margin-bottom:12px"></textarea>
+      <button class="btn btn-done" style="display:none; width:100%; justify-content:center" id="btn-resena" onclick="enviarResena()">Enviar reseña</button>
+    </div>
+
+    <button class="btn btn-nav" onclick="document.getElementById('cele').classList.remove('show')" style="margin:0 auto">Cerrar</button>
   </div>
 </div>
 
@@ -327,7 +337,26 @@ function pintarLeccion(editable, modo){
         <h3>Sobre esta lección</h3>
         <p>${curso.descripcion || 'En esta lección avanzarás en los contenidos del curso. Marca la lección como completada cuando termines para registrar tu progreso.'}</p>
       </div>
+      
+      <!-- NUEVO: Sección Comunidad -->
+      <div class="qa-section" style="margin-top:40px; padding-top:30px; border-top:1px solid var(--line)">
+        <h3>Preguntas y Respuestas</h3>
+        <p style="color:var(--muted); font-size:13.5px; margin-bottom:20px">Deja un comentario o pregunta sobre esta lección.</p>
+        
+        <div id="qa-form" style="display:none; margin-bottom:30px">
+          <textarea id="qa-input" placeholder="Escribe tu pregunta o comentario aquí..." style="width:100%; min-height:80px; padding:12px; border:1px solid var(--line); border-radius:8px; margin-bottom:10px; font-family:inherit; resize:vertical"></textarea>
+          <button class="btn btn-done" onclick="enviarPregunta()" id="btn-qa-send">Publicar pregunta</button>
+        </div>
+        <div id="qa-login-msg" style="padding:15px; background:var(--brand-soft); border-radius:8px; color:var(--brand); font-weight:600; font-size:14px; margin-bottom:30px">
+          <a href="/login.html" style="text-decoration:underline">Inicia sesión</a> para participar en la comunidad.
+        </div>
+        
+        <div id="qa-list">
+          <div style="text-align:center; padding:20px"><span class="spinner" style="border-top-color:var(--brand)"></span></div>
+        </div>
+      </div>
     </div>`;
+  cargarPreguntas();
 }
 
 function abrir(id){ actual = id; render(estadoActual()); }
@@ -386,6 +415,90 @@ function actualizarProgreso(){
   const hp = document.getElementById('hprog'); hp.style.visibility = (TOKEN && INSCRIPCION_ID) ? 'visible' : 'hidden';
   document.getElementById('hprog-pct').textContent = pct+'%';
   document.getElementById('hprog-bar').style.width = pct+'%';
+}
+
+
+// --- COMUNIDAD (Q&A y Reseñas) ---
+let currentCalificacion = 0;
+
+async function cargarPreguntas() {
+  const list = document.getElementById('qa-list');
+  if(!list) return;
+  
+  if(TOKEN && SESION) {
+    document.getElementById('qa-form').style.display = 'block';
+    document.getElementById('qa-login-msg').style.display = 'none';
+  } else {
+    document.getElementById('qa-form').style.display = 'none';
+    document.getElementById('qa-login-msg').style.display = 'block';
+  }
+
+  try {
+    const data = await api('GET', '/api/comunidad/lecciones/' + actual + '/preguntas');
+    const preguntas = data.preguntas || [];
+    if(preguntas.length === 0) {
+      list.innerHTML = '<div style="padding:20px 0; color:var(--muted); font-size:14px">Sé el primero en dejar un comentario.</div>';
+      return;
+    }
+    
+    list.innerHTML = preguntas.map(p => `
+      <div style="padding:16px 0; border-bottom:1px solid var(--line); display:flex; gap:14px">
+        <div style="width:36px; height:36px; border-radius:50%; background:var(--brand-soft); color:var(--brand); display:grid; place-items:center; font-weight:700; flex:none">
+          ${p.autor.charAt(0).toUpperCase()}
+        </div>
+        <div>
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:4px">
+            <strong style="font-size:14px">${p.autor}</strong>
+            ${p.rol_autor === 'instructor' || p.rol_autor === 'administrador' ? '<span style="font-size:10px; background:var(--brand); color:#fff; padding:2px 6px; border-radius:4px">Instructor</span>' : ''}
+            <span style="font-size:12px; color:var(--muted)">${new Date(p.fecha).toLocaleDateString()}</span>
+          </div>
+          <p style="font-size:14px; color:#3a3a40">${p.texto}</p>
+        </div>
+      </div>
+    `).join('');
+  } catch(e) {
+    list.innerHTML = '<div style="color:red">No se pudieron cargar los comentarios.</div>';
+  }
+}
+
+async function enviarPregunta() {
+  const text = document.getElementById('qa-input').value.trim();
+  if(!text) return;
+  const btn = document.getElementById('btn-qa-send');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    await api('POST', '/api/comunidad/lecciones/' + actual + '/preguntas', { texto: text }, true);
+    document.getElementById('qa-input').value = '';
+    toast('Comentario publicado');
+    await cargarPreguntas();
+  } catch(e) {
+    toast(e.message);
+  } finally {
+    btn.disabled = false; btn.textContent = 'Publicar pregunta';
+  }
+}
+
+function setEstrella(n) {
+  currentCalificacion = n;
+  const spans = document.getElementById('estrellas').getElementsByTagName('span');
+  for(let i=0; i<5; i++) {
+    spans[i].style.color = (i < n) ? 'var(--amber)' : 'var(--line)';
+  }
+  document.getElementById('resena-txt').style.display = 'block';
+  document.getElementById('btn-resena').style.display = 'flex';
+}
+
+async function enviarResena() {
+  const comentario = document.getElementById('resena-txt').value.trim();
+  const btn = document.getElementById('btn-resena');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    await api('POST', '/api/comunidad/cursos/' + CURSO_ID + '/resenas', { calificacion: currentCalificacion, comentario }, true);
+    document.getElementById('resena-box').innerHTML = '<div style="color:var(--accent); font-weight:700">¡Gracias por tu reseña!</div>';
+  } catch(e) {
+    toast(e.message);
+    btn.disabled = false; btn.textContent = 'Enviar reseña';
+  }
 }
 
 // "Reproducción" simulada (avanza una barra visual)

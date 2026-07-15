@@ -7,6 +7,8 @@ const usuariosRoutes = require('./routes/usuarios');
 const cursosRoutes = require('./routes/cursos');
 const inscripcionesRoutes = require('./routes/inscripciones');
 const actividadRoutes = require('./routes/actividad');
+const adminCursosRoutes = require('./routes/adminCursos');
+const comunidadRoutes = require('./routes/comunidad');
 
 function crearApp() {
   const app = express();
@@ -26,6 +28,8 @@ function crearApp() {
   app.use('/api/cursos', cursosRoutes);
   app.use('/api/inscripciones', inscripcionesRoutes);
   app.use('/api/actividad', actividadRoutes);
+  app.use('/api/admin/cursos', adminCursosRoutes);
+  app.use('/api/comunidad', comunidadRoutes);
 
   // 404 — JSON para rutas de API; cualquier otra ruta cae al SPA (index.html)
   app.use((req, res) => {
