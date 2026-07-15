@@ -105,8 +105,9 @@ tbody tr:hover{background:#faf8ff}
 .x{position:absolute;top:16px;right:18px;background:none;border:none;cursor:pointer;color:var(--muted);font-size:24px}
 .field{margin-bottom:16px}
 .field label{display:block;font-weight:600;font-size:13.5px;margin-bottom:7px}
-.field input,.field select{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:14.5px;outline:none;background:var(--bg)}
-.field input:focus,.field select:focus{border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft);background:#fff}
+.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;font:inherit;font-size:14.5px;outline:none;background:var(--bg)}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 4px var(--brand-soft);background:#fff}
+.field textarea{resize:vertical;font-family:inherit}
 .field .err{color:var(--red);font-size:12.5px;margin-top:6px;display:none}
 .field.bad input{border-color:var(--red)}
 .field.bad .err{display:block}
@@ -230,7 +231,7 @@ tbody tr:hover{background:#faf8ff}
           Nueva categoría
         </button>
       </div>
-      <p class="sub">Administra las agrupaciones de los cursos (Ej. Programación, Marketing, etc.).</p>
+      <p class="sub">Administra las agrupaciones de los cursos. <br><span style="color:var(--brand);font-weight:600;margin-top:6px;display:inline-block">💡 Tip: Para asignar o retirar un curso de una categoría, debes ir a la pestaña "Cursos" y editar el curso correspondiente.</span></p>
 
       <div class="table-wrap">
         <div class="loading" id="loading-categorias" style="display:none"><div class="ring"></div>Cargando categorías…</div>
@@ -539,12 +540,7 @@ function switchTab(tab) {
   document.getElementById('view-categorias').style.display = tab === 'categorias' ? 'block' : 'none';
   
   if (tab === 'cursos' && cursos.length === 0) cargarCursos();
-  if (tab === 'categorias' && categorias.length === 0) cargarCategorias();
-  document.getElementById('nav-usuarios').classList.toggle('active', tab === 'usuarios');
-  document.getElementById('nav-cursos').classList.toggle('active', tab === 'cursos');
-  document.getElementById('view-usuarios').style.display = tab === 'usuarios' ? 'block' : 'none';
-  document.getElementById('view-cursos').style.display = tab === 'cursos' ? 'block' : 'none';
-  if (tab === 'cursos' && cursos.length === 0) cargarCursos();
+  if (tab === 'categorias') renderCategorias();
 }
 
 async function cargarCursos() {
