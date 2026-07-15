@@ -2,7 +2,7 @@
 
 > Este archivo es la **fuente única de verdad** sobre el estado del proyecto: qué está hecho, qué está pendiente y las decisiones importantes. Actualízalo cada vez que hagas cambios significativos.
 
-**Última actualización:** iteración 6 (branding + Vercel + YouTube)
+**Última actualización:** iteración 8 (limpieza de deuda técnica)
 **Stack:** Node.js + Express + PostgreSQL (Neon en producción; pg-mem para tests y modo demo)
 **Frontend:** HTML + CSS + JavaScript vanilla, servido por el mismo servicio Node
 **Despliegue objetivo:** Vercel (Hobby / gratis) + Neon (Free / gratis)
@@ -16,14 +16,55 @@
 | **F** · Foundation | ✓ Completo | Arquitectura documentada (7 vistas), modelo de datos con 22 tablas. |
 | **R** · Render | ✓ Completo | Guía visual (paleta + tipografías), inventario de imágenes, 5 prototipos HTML. |
 | **A** · Animation | ✓ Completo | Sistema de movimiento con tokens y microinteracciones. |
-| **M** · Montaje | ✓ Completo | Base de datos + backend completo + 5 pantallas conectadas. **41 pruebas pasando.** |
-| **E** · Entrega | 🚧 Preparada | Código listo para Vercel. Solo falta ejecutar el despliegue (ver `DESPLIEGUE.md`). |
+| **M** · Montaje | ✓ Completo | BD + backend completo + 5 pantallas conectadas + panel admin ampliado + Q&A. **41 pruebas pasando.** |
+| **E** · Entrega | ✓ **Desplegado** | Publicado en Vercel + Neon. URL pública activa. |
 
 ---
 
 ## 2. Historial de iteraciones
 
-### Iteración 6 — Rebranding + Vercel + YouTube *(actual)*
+### Iteración 8 — Limpieza de deuda técnica *(actual, hecha por Claude)*
+
+Correcciones críticas a los cambios de la iteración 7:
+
+- **Seguridad:** eliminado del `src/appConfig.js` el endpoint `/api/dev/update-valentina`. Era una ruta pública sin autenticación que modificaba la base de datos de producción. Como los cambios que aplicaba (renombrar María → Valentina, insertar contenido de cursos) ya se habían aplicado a la BD, borrar el endpoint solo cierra el hueco sin revertir datos.
+- **Tests:** actualizado `test/run.js` para usar `valentina@servienvia.com` en lugar de `maria@servienvia.com` (que había quedado desincronizado con el seed tras el cambio de nombre). También se actualizaron las descripciones de los checks. **Las 41 pruebas vuelven a pasar.**
+- **CAMBIOS.md:** documentada íntegramente la iteración 7, que se había ejecutado sin dejar rastro en este archivo. Regla #6 del proceso restaurada.
+- Sin cambios visuales en el frontend. Sin renombres de archivos. Sin cambios en la lógica de negocio.
+
+### Iteración 7 — UI premium, panel de admin ampliado y despliegue en Vercel *(hecha por Antigravity)*
+
+Iteración grande con muchos cambios. **Documentada retroactivamente** en la iteración 8 porque no se registró en su momento.
+
+**Despliegue:**
+- **Adaptación a Vercel Zero-Config:** el handler serverless se movió de `backend/api/index.js` a `backend/index.js` (raíz del backend). Se eliminó `vercel.json`. Vercel detecta el `index.js` de la raíz automáticamente y expone Express como función serverless para cualquier ruta que llegue. Los archivos de `public/` los sirve el CDN de Vercel directamente. **Funciona en producción.**
+- Renombres de archivos internos (sin cambio funcional): `src/app.js` → `src/appConfig.js`, `src/server.js` → `src/startServer.js`, `src/demoServer.js` → `src/startDemoServer.js`. Los scripts de `package.json` se actualizaron acorde. Nota: estos renombres no aportaron valor técnico y desalinearon la documentación previa; se mantienen porque revertirlos ahora es más ruido que beneficio.
+
+**Backend ampliado — 15 endpoints nuevos:**
+- `src/controllers/adminCursosController.js` + `src/routes/adminCursos.js` (**10 endpoints**): CRUD completo de cursos, secciones y lecciones para el rol administrador. Ya no hay que editar SQL a mano.
+- `src/controllers/categoriasController.js` + `src/routes/categorias.js` (**1 endpoint público**) y `src/routes/adminCategorias.js` (**4 endpoints admin**): las categorías dejaron de ser una constante en el frontend y ahora viven en la tabla `categorias` de la BD, editables desde el panel.
+- `src/controllers/comunidadController.js` + `src/routes/comunidad.js` (**4 endpoints**): base de Q&A por lección (usa las tablas `preguntas` y `respuestas` que ya existían en el schema).
+
+**Frontend — 5 pantallas nuevas y UI rediseñada:**
+- `public/acerca-de.html`, `public/contacto.html`, `public/quienes-somos.html`, `public/privacidad-terminos.html`, `public/soporte.html`: páginas de contenido corporativo con footer profesional.
+- **Header rediseñado** ("cápsula flotante" con glassmorphism) y **menú hamburguesa** para móvil.
+- **Hero carousel** rediseñado con vista dividida, swipe táctil, transiciones automáticas y flechas ocultas en móvil.
+- **Footer** minimalista oscuro con enlaces a las páginas legales nuevas.
+- **Navegación contextual**: hacer clic en una categoría desde el header o hero envía un parámetro por la URL que auto-desplaza y filtra el catálogo.
+- CSS y JS del header extraídos a `public/css/header.css` y `public/js/header.js` (antes estaban inline).
+- Imágenes reales en `public/images/slide1.png`, `slide2.png`, `slide3.png` para el hero.
+
+**Datos:**
+- Seed ampliado: los 6 cursos ahora tienen temarios completos con secciones y lecciones reales de YouTube (freeCodeCamp, canales educativos públicos), no solo el curso de Python.
+- **María Restrepo → Valentina Gómez.** Cambio de nombre del usuario estudiante demo. Reflejado también en el correo (`valentina@servienvia.com`) y su descripción/intereses.
+
+**Notas honestas de esta iteración:**
+- Se creó un endpoint sin autenticación `/api/dev/update-valentina` para migrar datos en caliente sobre la BD de Vercel. **Anti-patrón grave**. Corregido en la iteración 8.
+- Los tests quedaron rotos tras el cambio de nombre. Corregido en la iteración 8.
+- Este archivo no se actualizó durante la iteración. Corregido en la iteración 8.
+- Quedaron 4 scripts temporales en `scratch/` (`apply_header.js`, `patch_admin.js`, `patch_index.js`, `update_db.js`). Se conservan por si son útiles, excluidos del deploy vía `.vercelignore`.
+
+### Iteración 6 — Rebranding + Vercel + YouTube *(por Claude)*
 - **Rebranding completo:** "AulaViva" → "Aula Virtual Servienvia".
   - Textos visibles: título de pestaña, logos ("Aula Virtual"), footer, textos del hero.
   - Correos demo: `@aulaviva.com` → `@servienvia.com`.
@@ -72,21 +113,26 @@
 | **Autenticación** | `POST /api/auth/login`, `GET /api/auth/me` |
 | **Usuarios (solo admin)** | `GET/POST/PUT/DELETE /api/usuarios[/:id]` |
 | **Catálogo (público)** | `GET /api/cursos`, `GET /api/cursos/:id` |
+| **Categorías (público)** | `GET /api/categorias` |
+| **Categorías (solo admin)** | `GET/POST/PUT/DELETE /api/admin/categorias[/:id]` |
+| **Cursos (solo admin)** | CRUD completo de cursos, secciones y lecciones en `/api/admin/cursos` (10 endpoints) |
 | **Inscripciones (con sesión)** | `GET/POST /api/inscripciones`, `PUT /api/inscripciones/:id`, `GET/PUT /api/inscripciones/:id/progreso` |
 | **Actividad (con sesión)** | `GET/POST /api/actividad` |
+| **Comunidad / Q&A (con sesión)** | Preguntas y respuestas por lección en `/api/comunidad` (4 endpoints) |
 | **Salud** | `GET /api/health` |
 
-### 3.3 Pantallas conectadas (5)
-- `/` — **Home** con catálogo en vivo, búsqueda y filtros por categoría.
+### 3.3 Pantallas conectadas
+- `/` — **Home** con catálogo en vivo, búsqueda, filtros por categoría, header flotante y hero carrusel.
 - `/login.html` — **Login** con manejo de errores específicos.
 - `/dashboard.html` — **Mi aprendizaje**: cursos, favoritos, archivados, racha y minutos.
 - `/reproductor.html` — Curso con video de YouTube embebido, temario, progreso.
-- `/admin.html` — Panel de administración con CRUD real de usuarios.
+- `/admin.html` — Panel de administración con CRUD real de usuarios y categorías.
+- `/acerca-de.html`, `/contacto.html`, `/quienes-somos.html`, `/privacidad-terminos.html`, `/soporte.html` — páginas de contenido corporativo.
 
 ### 3.4 Cuentas demo
 Contraseña de todas: **`servienvia2026`**
 - `admin@servienvia.com` — administrador
-- `maria@servienvia.com` — estudiante (6 cursos inscritos, racha activa)
+- `valentina@servienvia.com` — estudiante (6 cursos inscritos, racha activa)
 - `carlos@servienvia.com` — instructor
 - `ana@servienvia.com` — instructora
 - `andes@servienvia.com` — institución
@@ -105,15 +151,13 @@ npm run demo     # arranca en http://localhost:4000 con BD en memoria
 
 ---
 
-## 5. Qué falta antes de desplegar
+## 5. Estado del despliegue
 
-**Nada bloqueante.** El código está listo. Solo falta *ejecutar* los pasos de `DESPLIEGUE.md`:
+**Publicado en Vercel + Neon.** Cada `git push` a la rama `main` dispara un deploy automático.
 
-- [ ] Subir el código a GitHub.
-- [ ] Crear la base de datos en Neon.
-- [ ] Ejecutar `npm run db:init` apuntando a Neon.
-- [ ] Crear el proyecto en Vercel, añadir las 3 variables de entorno y desplegar.
-- [ ] Recorrer las 5 pantallas en la URL pública para confirmar.
+Si hay que hacer cambios en la base de datos de producción:
+- Para **cambios de esquema** (tablas nuevas, columnas): edita `schema.sql`, sube el cambio a GitHub, luego corre `npm run db:init` apuntando a `DATABASE_URL` de Neon. El script es idempotente.
+- Para **cambios de datos puntuales** (renombrar un usuario, insertar cursos, corregir un valor): abre el SQL Editor de Neon y ejecuta el SQL directamente. **Nunca crees endpoints públicos para esto.**
 
 ---
 

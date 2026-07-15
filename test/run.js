@@ -45,14 +45,14 @@ async function main() {
   check('login con correo inexistente -> 404 cuenta_no_encontrada', r.status === 404 && r.body.codigo === 'cuenta_no_encontrada');
 
   // contraseña incorrecta -> 401 credenciales_invalidas
-  r = await request(app).post('/api/auth/login').send({ correo: 'maria@servienvia.com', contrasena: 'mala' });
+  r = await request(app).post('/api/auth/login').send({ correo: 'valentina@servienvia.com', contrasena: 'mala' });
   check('login con contraseña incorrecta -> 401 credenciales_invalidas', r.status === 401 && r.body.codigo === 'credenciales_invalidas');
 
   // credenciales correctas (estudiante) -> token
-  r = await request(app).post('/api/auth/login').send({ correo: 'maria@servienvia.com', contrasena: 'servienvia2026' });
-  check('login correcto de María -> 200 + token', r.status === 200 && !!r.body.token);
+  r = await request(app).post('/api/auth/login').send({ correo: 'valentina@servienvia.com', contrasena: 'servienvia2026' });
+  check('login correcto de Valentina -> 200 + token', r.status === 200 && !!r.body.token);
   check('el usuario devuelto es estudiante', r.body.usuario && r.body.usuario.rol === 'estudiante');
-  const tokenMaria = r.body.token;
+  const tokenValentina = r.body.token;
 
   // login admin -> token de administrador
   r = await request(app).post('/api/auth/login').send({ correo: 'admin@servienvia.com', contrasena: 'servienvia2026' });
@@ -60,8 +60,8 @@ async function main() {
   const tokenAdmin = r.body.token;
 
   // /me con token
-  r = await request(app).get('/api/auth/me').set('Authorization', `Bearer ${tokenMaria}`);
-  check('GET /me devuelve el perfil de María', r.status === 200 && r.body.usuario.correo === 'maria@servienvia.com');
+  r = await request(app).get('/api/auth/me').set('Authorization', `Bearer ${tokenValentina}`);
+  check('GET /me devuelve el perfil de Valentina', r.status === 200 && r.body.usuario.correo === 'valentina@servienvia.com');
 
   // /me sin token -> 401
   r = await request(app).get('/api/auth/me');
@@ -71,7 +71,7 @@ async function main() {
   console.log('\nCRUD DE USUARIOS (solo administrador)');
 
   // un estudiante NO puede listar usuarios -> 403
-  r = await request(app).get('/api/usuarios').set('Authorization', `Bearer ${tokenMaria}`);
+  r = await request(app).get('/api/usuarios').set('Authorization', `Bearer ${tokenValentina}`);
   check('estudiante intenta listar usuarios -> 403 sin_permiso', r.status === 403 && r.body.codigo === 'sin_permiso');
 
   // admin lista usuarios
@@ -92,7 +92,7 @@ async function main() {
 
   // correo duplicado -> 409
   r = await request(app).post('/api/usuarios').set('Authorization', `Bearer ${tokenAdmin}`)
-    .send({ nombre: 'Repetida', correo: 'maria@servienvia.com', contrasena: 'x12345', rol: 'estudiante' });
+    .send({ nombre: 'Repetida', correo: 'valentina@servienvia.com', contrasena: 'x12345', rol: 'estudiante' });
   check('crear con correo duplicado -> 409 correo_duplicado', r.status === 409 && r.body.codigo === 'correo_duplicado');
 
   // admin edita el usuario
@@ -124,39 +124,39 @@ async function main() {
   // ---------- INSCRIPCIONES Y PROGRESO ----------
   console.log('\nINSCRIPCIONES Y PROGRESO');
 
-  // login María (estudiante con inscripciones en el seed)
-  r = await request(app).post('/api/auth/login').send({ correo: 'maria@servienvia.com', contrasena: 'servienvia2026' });
-  const tkMaria = r.body.token;
+  // login Valentina (estudiante con inscripciones en el seed)
+  r = await request(app).post('/api/auth/login').send({ correo: 'valentina@servienvia.com', contrasena: 'servienvia2026' });
+  const tkValentina = r.body.token;
 
-  r = await request(app).get('/api/inscripciones').set('Authorization', `Bearer ${tkMaria}`);
-  check('María lista sus inscripciones -> 6', r.status === 200 && r.body.total === 6);
+  r = await request(app).get('/api/inscripciones').set('Authorization', `Bearer ${tkValentina}`);
+  check('Valentina lista sus inscripciones -> 6', r.status === 200 && r.body.total === 6);
   check('cada inscripción trae título, instructor y progreso', r.body.inscripciones.every(i => i.titulo && i.instructor && i.progreso !== undefined));
 
-  r = await request(app).get('/api/inscripciones?estado=done').set('Authorization', `Bearer ${tkMaria}`);
+  r = await request(app).get('/api/inscripciones?estado=done').set('Authorization', `Bearer ${tkValentina}`);
   check('filtro estado=done -> 1 curso completado', r.status === 200 && r.body.total === 1);
-  r = await request(app).get('/api/inscripciones?estado=progress').set('Authorization', `Bearer ${tkMaria}`);
+  r = await request(app).get('/api/inscripciones?estado=progress').set('Authorization', `Bearer ${tkValentina}`);
   check('filtro estado=progress -> 4 cursos en progreso', r.body.total === 4);
 
   r = await request(app).get('/api/inscripciones');
   check('GET /inscripciones sin token -> 401', r.status === 401);
 
   // progreso por lección de la inscripción 1 (Python)
-  r = await request(app).get('/api/inscripciones/1/progreso').set('Authorization', `Bearer ${tkMaria}`);
+  r = await request(app).get('/api/inscripciones/1/progreso').set('Authorization', `Bearer ${tkValentina}`);
   check('progreso de la inscripción 1 -> 200 con detalle por lección', r.status === 200 && Array.isArray(r.body.progreso_lecciones));
   const completadasIni = r.body.progreso_lecciones.filter(p => p.completada).length;
   check('inscripción 1 tiene 4 lecciones completadas (seed)', completadasIni === 4);
 
   // marcar lección 5 -> recalcula 5/12 = 42%
-  r = await request(app).put('/api/inscripciones/1/progreso').set('Authorization', `Bearer ${tkMaria}`).send({ leccion_id: 5, completada: true });
+  r = await request(app).put('/api/inscripciones/1/progreso').set('Authorization', `Bearer ${tkValentina}`).send({ leccion_id: 5, completada: true });
   check('marcar lección 5 -> progreso recalculado a 42%', r.status === 200 && r.body.progreso === 42);
   // marcar lección 6 (nueva) -> 6/12 = 50%
-  r = await request(app).put('/api/inscripciones/1/progreso').set('Authorization', `Bearer ${tkMaria}`).send({ leccion_id: 6, completada: true });
+  r = await request(app).put('/api/inscripciones/1/progreso').set('Authorization', `Bearer ${tkValentina}`).send({ leccion_id: 6, completada: true });
   check('marcar lección 6 -> progreso 50%', r.status === 200 && r.body.progreso === 50);
 
   // favorito/archivado
-  r = await request(app).put('/api/inscripciones/2').set('Authorization', `Bearer ${tkMaria}`).send({ archivado: true });
+  r = await request(app).put('/api/inscripciones/2').set('Authorization', `Bearer ${tkValentina}`).send({ archivado: true });
   check('archivar inscripción 2 -> archivado=true', r.status === 200 && r.body.inscripcion.archivado === true);
-  r = await request(app).get('/api/inscripciones?archivado=true').set('Authorization', `Bearer ${tkMaria}`);
+  r = await request(app).get('/api/inscripciones?archivado=true').set('Authorization', `Bearer ${tkValentina}`);
   check('filtro archivado=true -> 1 inscripción', r.body.total === 1);
 
   // inscribirse (Carlos, sin inscripciones en el seed)
@@ -169,19 +169,19 @@ async function main() {
   check('inscripción duplicada -> 409 ya_inscrito', r.status === 409 && r.body.codigo === 'ya_inscrito');
 
   // aislamiento entre usuarios
-  r = await request(app).get(`/api/inscripciones/${insCarlos}/progreso`).set('Authorization', `Bearer ${tkMaria}`);
-  check('María no accede a inscripción ajena -> 404', r.status === 404);
+  r = await request(app).get(`/api/inscripciones/${insCarlos}/progreso`).set('Authorization', `Bearer ${tkValentina}`);
+  check('Valentina no accede a inscripción ajena -> 404', r.status === 404);
 
   // ---------- ACTIVIDAD / RACHAS ----------
   console.log('\nACTIVIDAD / RACHAS');
-  r = await request(app).get('/api/actividad').set('Authorization', `Bearer ${tkMaria}`);
-  check('actividad de María -> 200 con lista de días', r.status === 200 && Array.isArray(r.body.actividad));
-  check('racha de María = 5 días consecutivos (seed)', r.body.racha_dias === 5);
+  r = await request(app).get('/api/actividad').set('Authorization', `Bearer ${tkValentina}`);
+  check('actividad de Valentina -> 200 con lista de días', r.status === 200 && Array.isArray(r.body.actividad));
+  check('racha de Valentina = 5 días consecutivos (seed)', r.body.racha_dias === 5);
   check('minutos de la semana = 275 (seed)', r.body.minutos_semana === 275);
 
-  r = await request(app).post('/api/actividad').set('Authorization', `Bearer ${tkMaria}`).send({ minutos: 20 });
+  r = await request(app).post('/api/actividad').set('Authorization', `Bearer ${tkValentina}`).send({ minutos: 20 });
   check('registrar 20 min hoy -> 201', r.status === 201);
-  r = await request(app).get('/api/actividad').set('Authorization', `Bearer ${tkMaria}`);
+  r = await request(app).get('/api/actividad').set('Authorization', `Bearer ${tkValentina}`);
   check('minutos de la semana ahora = 295', r.body.minutos_semana === 295);
 
   // ---------- RESULTADO ----------

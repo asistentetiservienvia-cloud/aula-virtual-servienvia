@@ -6,3 +6,6 @@ DESPLIEGUE.md
 CAMBIOS.md
 render.yaml
 test
+
+# Scripts de desarrollo (movidos desde scratch/ en la iteración 8)
+dev-tools/
