@@ -10,7 +10,7 @@
 <style>
 :root{
   --ink:#1b1c20; --muted:#6a6f73; --line:#e7e3f0; --bg:#fbfaff; --card:#ffffff;
-  --brand:#5b34d6; --brand-soft:#efe9fd; --brand-dark:#4a28b8;
+  --brand:#139DCB; --brand-soft:#e6f5fb; --brand-dark:#0f85ae;
   --accent:#16a37a; --amber:#e8a317;
   --shadow:0 14px 40px -22px rgba(60,30,140,.45);
   --shadow-sm:0 6px 20px -14px rgba(60,30,140,.4);
@@ -141,7 +141,12 @@ footer{background:#161320;color:#cfc9dd;padding:56px 0 28px}
 
 <header>
   <div class="wrap nav">
-    <a class="logo" href="/"><span class="dot"></span>Aula Virtual</a>
+    <a class="logo" href="/" style="display:flex; align-items:center; gap:0px; color:#139DCB; user-select:none; text-decoration:none;">
+  <div style="position:relative; width:34px; height:44px; border:3.5px solid #139DCB; border-radius:50%; transform:rotate(-20deg); display:flex; justify-content:center; align-items:center; flex:none;">
+    <span style="font-family:'Brush Script MT', cursive; font-size:25px; transform:rotate(20deg) translate(0px, 1px); font-weight:500;">se</span>
+  </div>
+  <span style="font-family:Impact, 'Arial Narrow', sans-serif; font-size:38px; font-weight:900; letter-spacing:0.5px; transform:scaleX(0.55); transform-origin:left; margin-left:-5px;">SERVIENVIA</span>
+</a>
     <div class="explore">
       <button>Explorar cursos
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
@@ -255,7 +260,12 @@ footer{background:#161320;color:#cfc9dd;padding:56px 0 28px}
   <div class="wrap">
     <div class="foot-grid">
       <div>
-        <div class="foot-logo">Aula Virtual</div>
+        <div class="foot-logo" style="display:flex; align-items:center; gap:0px; color:#139DCB; user-select:none; text-decoration:none;">
+  <div style="position:relative; width:34px; height:44px; border:3.5px solid #139DCB; border-radius:50%; transform:rotate(-20deg); display:flex; justify-content:center; align-items:center; flex:none;">
+    <span style="font-family:'Brush Script MT', cursive; font-size:25px; transform:rotate(20deg) translate(0px, 1px); font-weight:500;">se</span>
+  </div>
+  <span style="font-family:Impact, 'Arial Narrow', sans-serif; font-size:38px; font-weight:900; letter-spacing:0.5px; transform:scaleX(0.55); transform-origin:left; margin-left:-5px;">SERVIENVIA</span>
+</div>
         <p style="font-size:14px;max-width:260px">Plataforma de aprendizaje oficial de Servienvia C.A.</p>
       </div>
       <div><h4>Aula Virtual</h4><a>Acerca de</a><a>Quiénes somos</a><a>Ponte en contacto</a><a>Enseña aquí</a></div>
@@ -287,6 +297,8 @@ let categoriaActiva = '';
 function setupHeader(){
   const cont = document.getElementById('header-auth');
   if (SESION) {
+    const ensenaBtn = document.querySelector('.nav-link.hide');
+    if (ensenaBtn) ensenaBtn.style.display = 'none';
     const ini = SESION.nombre.trim().split(/\s+/).map(p=>p[0]).slice(0,2).join('').toUpperCase();
     cont.innerHTML = `<div class="greet" onclick="irAPanel()">
       <div class="av">${ini}</div>

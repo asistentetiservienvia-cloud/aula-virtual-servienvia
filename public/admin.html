@@ -10,7 +10,7 @@
 <style>
 :root{
   --ink:#1b1c20; --muted:#6a6f73; --line:#e7e3f0; --bg:#fbfaff; --card:#ffffff;
-  --brand:#5b34d6; --brand-soft:#efe9fd; --brand-dark:#4a28b8;
+  --brand:#139DCB; --brand-soft:#e6f5fb; --brand-dark:#0f85ae;
   --accent:#16a37a; --accent-soft:#e6f7f0;
   --amber:#e8a317; --amber-soft:#fdf2e3; --red:#d6345b; --red-soft:#fdeef1; --red-dark:#b32548;
   --blue:#3470d6; --blue-soft:#e7f0fd; --teal:#0f9b8e; --teal-soft:#e2f6f3;
@@ -129,7 +129,12 @@ tbody tr:hover{background:#faf8ff}
 <body>
 <div class="app">
   <aside class="sidebar">
-    <div class="brand"><span class="dot"></span>Aula Virtual</div>
+    <div class="brand" style="display:flex; align-items:center; gap:0px; color:#139DCB; user-select:none; text-decoration:none;">
+  <div style="position:relative; width:34px; height:44px; border:3.5px solid #139DCB; border-radius:50%; transform:rotate(-20deg); display:flex; justify-content:center; align-items:center; flex:none;">
+    <span style="font-family:'Brush Script MT', cursive; font-size:25px; transform:rotate(20deg) translate(0px, 1px); font-weight:500;">se</span>
+  </div>
+  <span style="font-family:Impact, 'Arial Narrow', sans-serif; font-size:38px; font-weight:900; letter-spacing:0.5px; transform:scaleX(0.55); transform-origin:left; margin-left:-5px;">SERVIENVIA</span>
+</div>
     <div class="nav-lbl">Administración</div>
     <nav class="nav">
       <a href="/dashboard.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Volver a mi panel</a>
