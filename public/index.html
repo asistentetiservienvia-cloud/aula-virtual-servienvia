@@ -407,7 +407,8 @@ function pill(ok, txt){
 }
 
 function buscar(texto){
-  document.getElementById('search').value = texto;
+  const searchEl = document.getElementById('search');
+  if (searchEl) searchEl.value = texto;
   categoriaActiva = '';
   marcarCategoria();
   document.getElementById('cursos-title').textContent = `Resultados para "${texto}"`;
@@ -418,7 +419,8 @@ function buscar(texto){
 }
 function filtrarCategoria(cat){
   categoriaActiva = cat;
-  document.getElementById('search').value = '';
+  const searchEl = document.getElementById('search');
+  if (searchEl) searchEl.value = '';
   marcarCategoria();
   document.getElementById('cursos-title').textContent = cat;
   document.getElementById('cursos-sub').textContent = `Cursos de la categoría ${cat}.`;
@@ -431,7 +433,8 @@ function marcarCategoria(){
 }
 function limpiarFiltro(){
   categoriaActiva = '';
-  document.getElementById('search').value = '';
+  const searchEl = document.getElementById('search');
+  if (searchEl) searchEl.value = '';
   marcarCategoria();
   document.getElementById('cursos-title').textContent = 'Cursos en tendencia';
   document.getElementById('cursos-sub').textContent = 'Cargados directamente desde la base de datos.';
@@ -472,7 +475,13 @@ carEl.addEventListener('touchend', e => {
 
 (async () => {
   await setupCats();
-  cargarCursos();
+  const urlParams = new URLSearchParams(window.location.search);
+  const catParam = urlParams.get('cat');
+  if (catParam) {
+    filtrarCategoria(catParam);
+  } else {
+    cargarCursos();
+  }
 })();
 </script>
   <script src="/js/header.js"></script>

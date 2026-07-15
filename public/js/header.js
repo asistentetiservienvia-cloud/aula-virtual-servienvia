@@ -44,12 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if(cats.length === 0) {
           catDrop.innerHTML = '<div style="padding:10px; color:#6a6f73; font-size:13px; text-align:center">No hay categorías</div>';
         } else {
-          catDrop.innerHTML = cats.map(c => `
-            <a href="/?cat=${c.id}#cursos" class="hd-drop-item">
-              <span class="hd-drop-icon">${c.icono || '📚'}</span>
-              ${c.nombre}
-            </a>
-          `).join('');
+          catDrop.innerHTML = cats.map(c => {
+            const isHome = window.location.pathname === '/' || window.location.pathname === '/index.html';
+            if (isHome && typeof filtrarCategoria === 'function') {
+              return `<a href="#" onclick="event.preventDefault(); filtrarCategoria('${c.nombre}')" class="hd-drop-item">
+                <span class="hd-drop-icon">${c.icono || '📚'}</span>
+                ${c.nombre}
+              </a>`;
+            } else {
+              return `<a href="/?cat=${encodeURIComponent(c.nombre)}#cursos-sec" class="hd-drop-item">
+                <span class="hd-drop-icon">${c.icono || '📚'}</span>
+                ${c.nombre}
+              </a>`;
+            }
+          }).join('');
         }
       })
       .catch(() => {
