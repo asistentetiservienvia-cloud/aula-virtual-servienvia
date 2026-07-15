@@ -51,7 +51,7 @@ header{position:sticky;top:0;z-index:50;background:rgba(251,250,255,.85);backdro
 @media(max-width:1000px){.nav-link.hide,.search{display:none}}
 
 .hero { padding: 40px 0 20px; }
-.carousel { position: relative; border-radius: 30px; overflow: hidden; height: 480px; box-shadow: var(--shadow); background: var(--bg); }
+.carousel { position: relative; border-radius: 30px; overflow: hidden; height: 480px; box-shadow: var(--shadow); background: var(--bg); max-width: 1000px; margin: 0 auto; }
 .slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); display: grid; grid-template-columns: 1.1fr 0.9fr; }
 .slide.active { opacity: 1; visibility: visible; }
 .slide-content { padding: 0 8% 0 10%; display: flex; flex-direction: column; justify-content: center; transform: translateY(30px); transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s; }
@@ -459,12 +459,15 @@ function limpiarFiltro(){
   document.getElementById('clear-filter').classList.remove('show');
   cargarCursos();
 }
-document.getElementById('search').addEventListener('keydown', e=>{
-  if (e.key === 'Enter') {
-    const v = e.target.value.trim();
-    if (v) buscar(v); else limpiarFiltro();
-  }
-});
+const searchEl = document.getElementById('search');
+if (searchEl) {
+  searchEl.addEventListener('keydown', e=>{
+    if (e.key === 'Enter') {
+      const v = e.target.value.trim();
+      if (v) buscar(v); else limpiarFiltro();
+    }
+  });
+}
 
 let ci=0;const slides=document.querySelectorAll('.slide');const dotsBox=document.getElementById('dots');
 slides.forEach((_,k)=>{const d=document.createElement('span');if(!k)d.className='on';d.onclick=()=>set(k, true);dotsBox.appendChild(d);});
