@@ -50,23 +50,39 @@ header{position:sticky;top:0;z-index:50;background:rgba(251,250,255,.85);backdro
 .greet .txt b{font-size:14px}
 @media(max-width:1000px){.nav-link.hide,.search{display:none}}
 
-.hero{padding:30px 0 10px}
-.carousel{position:relative;border-radius:26px;overflow:hidden;height:430px;box-shadow:var(--shadow)}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity .8s;display:flex;align-items:center;padding:0 8%}
-.slide.active{opacity:1}
-.s1{background:linear-gradient(120deg,#efe9fd 0%,#fbfaff 55%,#e6f7f0 100%)}
-.s2{background:linear-gradient(120deg,#e6f7f0 0%,#fbfaff 50%,#fdf2e3 100%)}
-.s3{background:linear-gradient(120deg,#fdf2e3 0%,#fbfaff 50%,#efe9fd 100%)}
-.slide .card-msg{background:rgba(255,255,255,.78);backdrop-filter:blur(6px);border:1px solid #fff;border-radius:20px;padding:34px 38px;max-width:480px;box-shadow:0 10px 30px -18px rgba(0,0,0,.25)}
-.slide h1{font-size:clamp(30px,4vw,46px);margin-bottom:14px}
-.slide p{color:var(--muted);font-size:16px;margin-bottom:22px}
-.deco{position:absolute;border-radius:50%;filter:blur(2px);opacity:.6}
-.dots{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:9px}
-.dots span{width:9px;height:9px;border-radius:50%;background:#fff;opacity:.6;cursor:pointer;transition:.2s;box-shadow:0 0 0 1px rgba(0,0,0,.1)}
-.dots span.on{opacity:1;width:26px;border-radius:6px;background:var(--brand)}
-.arrow{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;background:#fff;border:none;cursor:pointer;display:grid;place-items:center;box-shadow:0 6px 18px -8px rgba(0,0,0,.4);z-index:3}
-.arrow:hover{background:var(--brand);color:#fff}
-.arrow.left{left:18px}.arrow.right{right:18px}
+.hero { padding: 40px 0 20px; }
+.carousel { position: relative; border-radius: 30px; overflow: hidden; height: 480px; box-shadow: var(--shadow); background: var(--bg); }
+.slide { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1); display: grid; grid-template-columns: 1.1fr 0.9fr; }
+.slide.active { opacity: 1; visibility: visible; }
+.slide-content { padding: 0 8% 0 10%; display: flex; flex-direction: column; justify-content: center; transform: translateY(30px); transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s; }
+.slide.active .slide-content { transform: translateY(0); }
+.slide-img { position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 30px; }
+.slide-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 20px; box-shadow: 0 16px 30px -10px rgba(0,0,0,0.2); transform: scale(1.05); transition: transform 4s ease-out; }
+.slide.active .slide-img img { transform: scale(1); }
+
+.slide h1 { font-size: clamp(34px, 4.5vw, 48px); margin-bottom: 16px; line-height: 1.1; }
+.slide p { color: var(--muted); font-size: 16.5px; margin-bottom: 30px; line-height: 1.6; max-width: 480px; }
+.slide-bg-1 { background: linear-gradient(120deg, #fbfaff 0%, #efe9fd 100%); }
+.slide-bg-2 { background: linear-gradient(120deg, #fbfaff 0%, #e6f7f0 100%); }
+.slide-bg-3 { background: linear-gradient(120deg, #fbfaff 0%, #fdf2e3 100%); }
+.btn-slide { display: inline-block; text-align: center; width: max-content; }
+
+.dots{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10;}
+.dots span{width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,0.15);cursor:pointer;transition:.3s;}
+.dots span.on{background:var(--brand);width:32px;border-radius:6px;}
+
+.arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.9);backdrop-filter:blur(4px);border:1px solid rgba(0,0,0,0.05);cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 20px -8px rgba(0,0,0,.15);z-index:10;transition:all .2s;color:var(--ink);}
+.arrow:hover{background:var(--brand);color:#fff;transform:translateY(-50%) scale(1.05);}
+.arrow.left{left:24px;}
+.arrow.right{right:24px;}
+
+@media(max-width: 900px){
+  .carousel { height: auto; min-height: 650px; }
+  .slide { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .slide-content { padding: 40px 6% 20px; text-align: center; align-items: center; order: 1; transform: translateY(20px); }
+  .slide-img { order: 2; height: 320px; padding: 0 20px 30px; }
+  .slide p { margin-left: auto; margin-right: auto; }
+}
 
 section.block{padding:54px 0}
 .eyebrow{color:var(--brand);font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px}
@@ -192,33 +208,38 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
 <div class="hero">
   <div class="wrap">
     <div class="carousel" id="car">
-      <div class="slide s1 active">
-        <div class="deco" style="width:200px;height:200px;background:#cbb8f7;right:8%;top:14%"></div>
-        <div class="deco" style="width:120px;height:120px;background:#9fe3c8;right:24%;bottom:10%"></div>
-        <div class="card-msg">
+      <div class="slide slide-bg-1 active">
+        <div class="slide-content">
           <h1>Aprende sin límites,<br>a tu propio ritmo</h1>
-          <p>Miles de cursos creados por instructores e instituciones de verdad. Empieza hoy.</p>
-          <button class="btn btn-solid" onclick="document.getElementById('cursos-sec').scrollIntoView()">Explorar catálogo</button>
+          <p>Miles de cursos creados por instructores e instituciones de verdad. Estudia desde cualquier lugar, cuando quieras y lleva tus habilidades al siguiente nivel.</p>
+          <button class="btn btn-solid btn-slide" onclick="document.getElementById('cursos-sec').scrollIntoView()">Explorar catálogo</button>
+        </div>
+        <div class="slide-img">
+          <img src="/images/slide1.png" alt="Estudiante en cafe">
         </div>
       </div>
-      <div class="slide s2">
-        <div class="deco" style="width:180px;height:180px;background:#f7d79b;right:12%;top:18%"></div>
-        <div class="card-msg">
-          <h1>¿Enseñas algo?<br>Compártelo al mundo</h1>
-          <p>Publica tus cursos, gestiona inscripciones y sigue el progreso de cada estudiante.</p>
-          <button class="btn btn-solid" onclick="location.href='/login.html'">Empieza a enseñar</button>
+      <div class="slide slide-bg-2">
+        <div class="slide-content">
+          <h1>¿Eres experto en tu área?<br>Enseña al mundo</h1>
+          <p>Únete a nuestra red de instructores, publica tus cursos fácilmente, gestiona inscripciones y ayuda a miles de estudiantes a transformar sus vidas.</p>
+          <button class="btn btn-solid btn-slide" onclick="location.href='/login.html'">Empieza a enseñar</button>
+        </div>
+        <div class="slide-img">
+          <img src="/images/slide2.png" alt="Instructor grabando">
         </div>
       </div>
-      <div class="slide s3">
-        <div class="deco" style="width:160px;height:160px;background:#c5b6f5;left:10%;bottom:14%"></div>
-        <div class="card-msg">
+      <div class="slide slide-bg-3">
+        <div class="slide-content">
           <h1>Certifícate y<br>destaca tu perfil</h1>
-          <p>Completa rutas de aprendizaje y obtén certificaciones que avalan tus habilidades.</p>
-          <button class="btn btn-solid" onclick="document.getElementById('cursos-sec').scrollIntoView()">Ver cursos</button>
+          <p>Completa rutas de aprendizaje diseñadas por profesionales de la industria y obtén certificaciones oficiales que avalan y potencian tu carrera.</p>
+          <button class="btn btn-solid btn-slide" onclick="document.getElementById('cursos-sec').scrollIntoView()">Ver cursos</button>
+        </div>
+        <div class="slide-img">
+          <img src="/images/slide3.png" alt="Estudiante certificado">
         </div>
       </div>
-      <button class="arrow left" onclick="go(-1)">‹</button>
-      <button class="arrow right" onclick="go(1)">›</button>
+      <button class="arrow left" onclick="go(-1, true)">‹</button>
+      <button class="arrow right" onclick="go(1, true)">›</button>
       <div class="dots" id="dots"></div>
     </div>
   </div>
@@ -446,11 +467,20 @@ document.getElementById('search').addEventListener('keydown', e=>{
 });
 
 let ci=0;const slides=document.querySelectorAll('.slide');const dotsBox=document.getElementById('dots');
-slides.forEach((_,k)=>{const d=document.createElement('span');if(!k)d.className='on';d.onclick=()=>set(k);dotsBox.appendChild(d);});
+slides.forEach((_,k)=>{const d=document.createElement('span');if(!k)d.className='on';d.onclick=()=>set(k, true);dotsBox.appendChild(d);});
 const dots=dotsBox.children;
-function set(n){slides[ci].classList.remove('active');dots[ci].classList.remove('on');ci=(n+slides.length)%slides.length;slides[ci].classList.add('active');dots[ci].classList.add('on');}
-function go(d){set(ci+d);}
-setInterval(()=>go(1),5500);
+function set(n, manual=false){
+  if(manual) resetTimer();
+  slides[ci].classList.remove('active');dots[ci].classList.remove('on');
+  ci=(n+slides.length)%slides.length;
+  slides[ci].classList.add('active');dots[ci].classList.add('on');
+}
+function go(d, manual=false){set(ci+d, manual);}
+let carTimer = setInterval(()=>go(1), 7000);
+function resetTimer() {
+  clearInterval(carTimer);
+  carTimer = setInterval(()=>go(1), 7000);
+}
 
 setupHeader();
 (async () => {
