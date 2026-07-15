@@ -1,0 +1,28 @@
+{
+  "name": "aula-virtual-servienvia",
+  "version": "1.0.0",
+  "description": "API REST del Aula Virtual de Servienvia \u2014 autenticaci\u00f3n, gesti\u00f3n de usuarios y cat\u00e1logo de cursos.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node src/demoServer.js",
+    "dev": "nodemon src/server.js",
+    "test": "node test/run.js",
+    "db:init": "node scripts/initDb.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "pg-mem": "^2.8.1",
+    "supertest": "^7.0.0"
+  }
+}

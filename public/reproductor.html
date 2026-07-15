@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aula Virtual Servienvia — Reproductor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1b1c20; --muted:#6a6f73; --line:#e7e3f0; --bg:#fbfaff; --card:#ffffff;
+  --brand:#5b34d6; --brand-soft:#efe9fd; --brand-dark:#4a28b8;
+  --accent:#16a37a; --accent-soft:#e6f7f0; --amber:#e8a317;
+  --shadow:0 14px 40px -22px rgba(60,30,140,.45);
+  --shadow-sm:0 6px 20px -14px rgba(60,30,140,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Fraunces',serif;line-height:1.1;font-weight:900;letter-spacing:-.02em}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit}
+
+header{position:sticky;top:0;z-index:50;background:#161320;color:#fff;height:62px;display:flex;align-items:center;padding:0 22px;gap:18px}
+header .logo{font-family:'Fraunces',serif;font-weight:900;font-size:21px;color:#fff;display:flex;align-items:center;gap:7px}
+header .logo .dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+header .ctitle{font-size:14.5px;font-weight:600;color:#d7d2e6;border-left:1px solid #39324f;padding-left:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40vw}
+header .spacer{flex:1}
+header .hprog{display:flex;align-items:center;gap:10px;font-size:13px;color:#cfc9dd}
+header .hbar{width:120px;height:8px;border-radius:99px;background:#39324f;overflow:hidden}
+header .hbar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .5s}
+header .back{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:999px;padding:8px 15px;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:7px}
+header .back:hover{background:rgba(255,255,255,.22)}
+
+.layout{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 62px)}
+@media(max-width:980px){.layout{grid-template-columns:1fr}}
+
+/* PLAYER */
+.player-col{padding:0}
+.video{aspect-ratio:16/9;background:linear-gradient(135deg,#241b45,#000);display:flex;align-items:center;justify-content:center;position:relative;color:#fff}
+.video .ph{text-align:center;padding:20px}
+.video .play{width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);display:grid;place-items:center;margin:0 auto 16px;cursor:pointer;transition:.2s;border:2px solid rgba(255,255,255,.4)}
+.video .play:hover{background:rgba(255,255,255,.28);transform:scale(1.05)}
+.video .ph small{opacity:.7;font-size:13px;display:block;margin-top:4px}
+.video .badge-tipo{position:absolute;top:16px;left:16px;background:rgba(0,0,0,.45);padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+.video-embed{padding:0;background:#000}
+.video-embed iframe{width:100%;height:100%;position:absolute;top:0;left:0;border:0}
+.bar-controls{background:#1c1830;height:46px;display:flex;align-items:center;gap:8px;padding:0 16px;color:#cfc9dd}
+.bar-controls .pbar{flex:1;height:6px;border-radius:99px;background:#39324f;overflow:hidden;cursor:pointer}
+.bar-controls .pbar i{display:block;height:100%;width:0;background:var(--brand);border-radius:99px}
+.bar-controls button{background:none;border:none;color:#cfc9dd;cursor:pointer;font:inherit;font-size:13px;display:grid;place-items:center;padding:4px}
+.bar-controls button:hover{color:#fff}
+.bar-controls .t{font-size:12px;font-variant-numeric:tabular-nums}
+
+.lesson-info{padding:26px 30px}
+.lesson-info .secname{color:var(--brand);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.lesson-info h1{font-size:25px;margin-bottom:10px}
+.lesson-info .meta{display:flex;gap:16px;color:var(--muted);font-size:13.5px;margin-bottom:22px;flex-wrap:wrap}
+.lesson-info .meta span{display:flex;align-items:center;gap:6px}
+.row-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:none;cursor:pointer;font:inherit;font-weight:700;border-radius:999px;padding:12px 22px;font-size:14px;transition:.18s;display:inline-flex;align-items:center;gap:8px}
+.btn-done{background:var(--accent);color:#fff}
+.btn-done:hover{background:#0e8a64}
+.btn-undone{background:var(--accent-soft);color:#0e7a5a}
+.btn-undone:hover{filter:brightness(.97)}
+.btn-nav{background:#fff;border:1.5px solid var(--line)!important;color:var(--ink)}
+.btn-nav:hover{border-color:var(--brand)!important;color:var(--brand)}
+.btn-nav:disabled{opacity:.4;cursor:not-allowed}
+.nav-pair{margin-left:auto;display:flex;gap:8px}
+
+.desc{margin-top:26px;padding-top:24px;border-top:1px solid var(--line);color:#3a3a40;font-size:14.5px;max-width:680px}
+.desc h3{font-size:16px;margin-bottom:8px;color:var(--ink)}
+
+/* SIDEBAR TEMARIO */
+.temario{background:var(--card);border-left:1px solid var(--line);overflow-y:auto;max-height:calc(100vh - 62px)}
+.temario .head{padding:20px 22px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--card);z-index:2}
+.temario .head h2{font-size:18px;margin-bottom:10px}
+.temario .head .pl{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.temario .head .plbar{flex:1;height:8px;border-radius:99px;background:var(--brand-soft);overflow:hidden}
+.temario .head .plbar i{display:block;height:100%;background:var(--brand);border-radius:99px;transition:width .5s}
+.temario .head .plbar i.done{background:var(--accent)}
+.sec{border-bottom:1px solid var(--line)}
+.sec .sh{padding:14px 22px;background:#faf8ff;font-weight:700;font-size:13.5px;display:flex;justify-content:space-between;align-items:center}
+.sec .sh small{color:var(--muted);font-weight:500}
+.lec{display:flex;align-items:center;gap:12px;padding:13px 22px;cursor:pointer;transition:.12s;border-left:3px solid transparent}
+.lec:hover{background:#faf8ff}
+.lec.active{background:var(--brand-soft);border-left-color:var(--brand)}
+.lec .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;color:#fff;transition:.15s}
+.lec .ck.on{background:var(--accent);border-color:var(--accent)}
+.lec .tx{flex:1;min-width:0}
+.lec .tx .t{font-size:13.5px;font-weight:600;line-height:1.3}
+.lec.active .tx .t{color:var(--brand)}
+.lec .tx .d{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:5px;margin-top:2px}
+.lec .playing{color:var(--brand);flex:none}
+
+/* estados */
+.center-state{display:grid;place-items:center;min-height:60vh;text-align:center;padding:30px}
+.center-state .ic{width:74px;height:74px;border-radius:50%;background:var(--brand-soft);display:grid;place-items:center;margin:0 auto 16px;color:var(--brand)}
+.center-state h2{font-size:22px;margin-bottom:6px}
+.center-state p{color:var(--muted);max-width:380px;margin-bottom:20px}
+.skel-line{height:14px;border-radius:6px;background:linear-gradient(90deg,#ece8f5 25%,#f6f3fc 50%,#ece8f5 75%);background-size:200% 100%;animation:sh 1.4s infinite;margin-bottom:10px}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--ink);color:#fff;padding:14px 24px;border-radius:999px;font-size:14px;font-weight:600;box-shadow:var(--shadow);z-index:200;opacity:0;transition:.35s;display:flex;align-items:center;gap:10px}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.toast svg{color:#5fd6a8}
+.spinner{width:16px;height:16px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* celebración */
+.cele{position:fixed;inset:0;background:rgba(20,15,40,.55);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:150;padding:20px}
+.cele.show{display:flex}
+.cele .box{background:#fff;border-radius:24px;padding:40px;text-align:center;max-width:400px;animation:pop .4s}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:scale(1)}}
+.cele .trophy{width:90px;height:90px;border-radius:50%;background:var(--amber);display:grid;place-items:center;margin:0 auto 18px;color:#fff;animation:popb .6s cubic-bezier(.17,.67,.24,1.34)}
+@keyframes popb{from{transform:scale(.3)}to{transform:scale(1)}}
+.cele h2{font-size:26px;margin-bottom:8px}
+.cele p{color:var(--muted);margin-bottom:22px}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="/"><span class="dot"></span>Aula Virtual</a>
+  <span class="ctitle" id="ctitle">Cargando…</span>
+  <div class="spacer"></div>
+  <div class="hprog" id="hprog" style="visibility:hidden">
+    <span id="hprog-pct">0%</span>
+    <div class="hbar"><i id="hprog-bar" style="width:0%"></i></div>
+  </div>
+  <button class="back" onclick="volver()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>Volver</button>
+</header>
+
+<div id="app">
+  <div class="layout">
+    <div class="player-col">
+      <div class="video"><div class="ph"><div class="skel-line" style="width:60px;height:60px;border-radius:50%;margin:0 auto 16px"></div></div></div>
+    </div>
+    <aside class="temario">
+      <div class="head"><h2>Contenido del curso</h2></div>
+      <div style="padding:22px"><div class="skel-line" style="width:80%"></div><div class="skel-line" style="width:60%"></div><div class="skel-line" style="width:70%"></div></div>
+    </aside>
+  </div>
+</div>
+
+<div class="cele" id="cele">
+  <div class="box">
+    <div class="trophy"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/></svg></div>
+    <h2>¡Curso completado!</h2>
+    <p id="cele-txt">Terminaste todas las lecciones. ¡Gran trabajo!</p>
+    <button class="btn btn-done" onclick="document.getElementById('cele').classList.remove('show')" style="margin:0 auto">Seguir aprendiendo</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg><span id="toast-txt">Listo</span></div>
+
+<script>
+const API = window.location.origin;
+const TOKEN = localStorage.getItem('avs_token');
+const SESION = JSON.parse(localStorage.getItem('avs_usuario') || 'null');
+const params = new URLSearchParams(location.search);
+const CURSO_ID = params.get('curso');
+let INSCRIPCION_ID = params.get('inscripcion');   // puede venir nulo
+
+let curso = null;
+let lecciones = [];          // plano, en orden
+let completadas = new Set(); // ids de lecciones completadas
+let actual = null;           // id de la lección actual
+
+function fmtDur(seg){
+  if(!seg) return '—';
+  const m = Math.floor(seg/60), s = seg%60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+// Convierte una URL de YouTube/Vimeo a su forma embebible (iframe).
+// Soporta: youtube.com/watch?v=ID · youtu.be/ID · vimeo.com/ID
+// Si no reconoce el formato, devuelve null (se muestra el placeholder).
+function extraerEmbed(url){
+  if (!url) return null;
+  // YouTube estándar: watch?v=ID  o  con parámetros extra
+  let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([A-Za-z0-9_-]{11})/);
+  if (m) return `https://www.youtube.com/embed/${m[1]}?rel=0&modestbranding=1`;
+  // Vimeo
+  m = url.match(/vimeo\.com\/(\d+)/);
+  if (m) return `https://player.vimeo.com/video/${m[1]}`;
+  return null;
+}
+
+async function api(metodo, ruta, cuerpo, conToken){
+  const opts = { method: metodo, headers: {} };
+  if (conToken && TOKEN) opts.headers.Authorization = 'Bearer ' + TOKEN;
+  if (cuerpo !== undefined) { opts.headers['Content-Type']='application/json'; opts.body=JSON.stringify(cuerpo); }
+  const resp = await fetch(API + ruta, opts);
+  const data = await resp.json().catch(()=>({}));
+  if (!resp.ok) { const e=new Error(data.error||'Error'); e.codigo=data.codigo; e.status=resp.status; throw e; }
+  return data;
+}
+
+async function init(){
+  if (!CURSO_ID) { errorPantalla('Falta indicar el curso.'); return; }
+  try {
+    const d = await api('GET', '/api/cursos/' + CURSO_ID);
+    curso = d.curso;
+    lecciones = [];
+    curso.secciones.forEach(sec => sec.lecciones.forEach(l => lecciones.push({ ...l, seccion: sec.titulo })));
+    document.getElementById('ctitle').textContent = curso.titulo;
+
+    if (!TOKEN || !SESION) { render(false); return; } // vista previa sin sesión
+
+    // Resolver la inscripción del usuario para este curso
+    if (!INSCRIPCION_ID) {
+      const mis = await api('GET', '/api/inscripciones', undefined, true);
+      const ins = mis.inscripciones.find(i => String(i.curso_id) === String(CURSO_ID));
+      if (ins) INSCRIPCION_ID = ins.id;
+    }
+
+    if (!INSCRIPCION_ID) { render('no-inscrito'); return; } // con sesión pero sin inscripción
+
+    // Cargar progreso
+    const prog = await api('GET', '/api/inscripciones/' + INSCRIPCION_ID + '/progreso', undefined, true);
+    completadas = new Set(prog.progreso_lecciones.filter(p => p.completada).map(p => p.leccion_id));
+    render(true);
+  } catch (e) {
+    errorPantalla(e.message || 'No se pudo cargar el curso.');
+  }
+}
+
+function render(modo){
+  // modo: true (inscrito), false (sin sesión), 'no-inscrito'
+  actual = actual || (lecciones[0] && lecciones[0].id);
+  const editable = modo === true;
+
+  document.getElementById('app').innerHTML = `
+    <div class="layout">
+      <div class="player-col" id="player"></div>
+      <aside class="temario">
+        <div class="head">
+          <h2>Contenido del curso</h2>
+          <div class="pl">
+            <div class="plbar"><i id="pl-bar"></i></div>
+            <span id="pl-txt"></span>
+          </div>
+        </div>
+        <div id="secs"></div>
+      </aside>
+    </div>`;
+
+  // temario
+  let html = '';
+  curso.secciones.forEach(sec => {
+    const lecs = sec.lecciones;
+    const hechas = lecs.filter(l => completadas.has(l.id)).length;
+    html += `<div class="sec"><div class="sh">${sec.titulo}<small>${hechas}/${lecs.length}</small></div>`;
+    lecs.forEach(l => {
+      const on = completadas.has(l.id);
+      const act = l.id === actual;
+      html += `<div class="lec ${act?'active':''}" onclick="abrir(${l.id})">
+        <div class="ck ${on?'on':''}">${on?'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>':''}</div>
+        <div class="tx"><div class="t">${l.titulo}</div><div class="d">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${l.tipo==='documento'?'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>':'<polygon points="5 3 19 12 5 21 5 3"/>'}</svg>
+          ${l.tipo==='documento'?'Lectura':'Video'} · ${fmtDur(l.duracion_segundos)}</div></div>
+        ${act?'<svg class="playing" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>':''}
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById('secs').innerHTML = html;
+
+  pintarLeccion(editable, modo);
+  actualizarProgreso();
+}
+
+function pintarLeccion(editable, modo){
+  const l = lecciones.find(x => x.id === actual);
+  if (!l) return;
+  const idx = lecciones.findIndex(x => x.id === actual);
+  const on = completadas.has(l.id);
+
+  let cta = '';
+  if (editable) {
+    cta = on
+      ? `<button class="btn btn-undone" onclick="marcar(false)" id="btn-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Completada</button>`
+      : `<button class="btn btn-done" onclick="marcar(true)" id="btn-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>Marcar como completada</button>`;
+  } else if (modo === 'no-inscrito') {
+    cta = `<button class="btn btn-done" onclick="inscribirse()" id="btn-enroll"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>Inscribirme en este curso</button>`;
+  } else {
+    cta = `<button class="btn btn-done" onclick="location.href='/login.html'">Inicia sesión para guardar tu progreso</button>`;
+  }
+
+  // ¿La lección tiene un video de YouTube o Vimeo? Extraemos el ID para embeber.
+  const embedUrl = extraerEmbed(l.url_contenido);
+  const videoHtml = embedUrl
+    ? `<div class="video video-embed"><iframe src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
+    : `<div class="video">
+        <div class="badge-tipo"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${l.tipo==='documento'?'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>':'<polygon points="5 3 19 12 5 21 5 3"/>'}</svg>${l.tipo==='documento'?'Lectura':'Video'}</div>
+        <div class="ph"><div class="play" onclick="togglePlay()" id="playbtn"><svg width="32" height="32" viewBox="0 0 24 24" fill="#fff" stroke="none"><polygon points="6 4 20 12 6 20 6 4"/></svg></div>
+          <div style="font-weight:700;font-size:16px">${l.titulo}</div><small>Sin video asignado · ${fmtDur(l.duracion_segundos)}</small></div>
+      </div>`;
+
+  document.getElementById('player').innerHTML = `
+    ${videoHtml}
+    ${embedUrl ? '' : `<div class="bar-controls">
+      <button onclick="togglePlay()" id="ctrl-play"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4"/></svg></button>
+      <span class="t" id="t-cur">0:00</span>
+      <div class="pbar" id="pbar"><i id="pbar-i"></i></div>
+      <span class="t">${fmtDur(l.duracion_segundos)}</span>
+      <button title="Velocidad">1x</button>
+      <button title="Subtítulos"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 11h2M6 15h6M14 15h4M12 11h6"/></svg></button>
+    </div>`}
+    <div class="lesson-info">
+      <div class="secname">${l.seccion}</div>
+      <h1>${l.titulo}</h1>
+      <div class="meta">
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>${fmtDur(l.duracion_segundos)}</span>
+        <span><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${l.tipo==='documento'?'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>':'<polygon points="5 3 19 12 5 21 5 3"/>'}</svg>${l.tipo==='documento'?'Lectura':'Video'}</span>
+        <span>Lección ${idx+1} de ${lecciones.length}</span>
+      </div>
+      <div class="row-actions">
+        ${cta}
+        <div class="nav-pair">
+          <button class="btn btn-nav" onclick="irLeccion(-1)" ${idx===0?'disabled':''}><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>Anterior</button>
+          <button class="btn btn-nav" onclick="irLeccion(1)" ${idx===lecciones.length-1?'disabled':''}>Siguiente<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+        </div>
+      </div>
+      <div class="desc">
+        <h3>Sobre esta lección</h3>
+        <p>${curso.descripcion || 'En esta lección avanzarás en los contenidos del curso. Marca la lección como completada cuando termines para registrar tu progreso.'}</p>
+      </div>
+    </div>`;
+}
+
+function abrir(id){ actual = id; render(estadoActual()); }
+function irLeccion(delta){
+  const idx = lecciones.findIndex(x => x.id === actual);
+  const n = idx + delta;
+  if (n>=0 && n<lecciones.length){ actual = lecciones[n].id; render(estadoActual()); }
+}
+function estadoActual(){
+  if (!TOKEN || !SESION) return false;
+  if (!INSCRIPCION_ID) return 'no-inscrito';
+  return true;
+}
+
+async function marcar(valor){
+  const btn = document.getElementById('btn-mark');
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  try {
+    const d = await api('PUT', '/api/inscripciones/' + INSCRIPCION_ID + '/progreso',
+      { leccion_id: actual, completada: valor }, true);
+    if (valor) completadas.add(actual); else completadas.delete(actual);
+    render(true);
+    toast(valor ? '¡Lección completada!' : 'Lección desmarcada');
+    if (d.progreso === 100 && valor) {
+      document.getElementById('cele-txt').textContent = `Completaste las ${d.total_lecciones} lecciones de "${curso.titulo}".`;
+      document.getElementById('cele').classList.add('show');
+    }
+  } catch (e) {
+    toast(e.message); btn.innerHTML = orig; btn.disabled = false;
+  }
+}
+
+async function inscribirse(){
+  const btn = document.getElementById('btn-enroll');
+  btn.innerHTML = '<span class="spinner"></span>'; btn.disabled = true;
+  try {
+    const d = await api('POST', '/api/inscripciones', { curso_id: Number(CURSO_ID) }, true);
+    INSCRIPCION_ID = d.inscripcion.id;
+    completadas = new Set();
+    toast('¡Te inscribiste! Ya puedes registrar tu progreso.');
+    render(true);
+  } catch (e) {
+    if (e.codigo === 'ya_inscrito') { toast('Ya estabas inscrito; recargando…'); setTimeout(()=>location.reload(), 900); }
+    else { toast(e.message); btn.innerHTML = 'Inscribirme en este curso'; btn.disabled = false; }
+  }
+}
+
+function actualizarProgreso(){
+  const total = lecciones.length;
+  const hechas = lecciones.filter(l => completadas.has(l.id)).length;
+  const pct = total ? Math.round(100*hechas/total) : 0;
+  const done = pct === 100;
+  const plBar = document.getElementById('pl-bar'); if (plBar){ plBar.style.width = pct+'%'; plBar.classList.toggle('done', done); }
+  const plTxt = document.getElementById('pl-txt'); if (plTxt) plTxt.textContent = `${hechas}/${total}`;
+  const hp = document.getElementById('hprog'); hp.style.visibility = (TOKEN && INSCRIPCION_ID) ? 'visible' : 'hidden';
+  document.getElementById('hprog-pct').textContent = pct+'%';
+  document.getElementById('hprog-bar').style.width = pct+'%';
+}
+
+// "Reproducción" simulada (avanza una barra visual)
+let playing=false, t=0, timer=null;
+function togglePlay(){
+  playing = !playing;
+  const l = lecciones.find(x=>x.id===actual);
+  const dur = l ? l.duracion_segundos : 0;
+  if (playing){
+    timer = setInterval(()=>{
+      t += 1;
+      const pct = dur ? Math.min(100, 100*t/dur) : 0;
+      const i = document.getElementById('pbar-i'); if(i) i.style.width = pct+'%';
+      const tc = document.getElementById('t-cur'); if(tc) tc.textContent = fmtDur(t);
+      if (dur && t>=dur){ playing=false; clearInterval(timer); }
+    }, 1000);
+  } else { clearInterval(timer); }
+}
+
+function volver(){ location.href = (TOKEN && SESION) ? '/dashboard.html' : '/'; }
+function errorPantalla(msg){
+  document.getElementById('app').innerHTML = `<div class="center-state">
+    <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg></div>
+    <h2>No se pudo abrir el curso</h2><p>${msg}</p>
+    <button class="btn btn-done" onclick="volver()" style="margin:0 auto">Volver</button></div>`;
+}
+
+let tT;
+function toast(msg){ const el=document.getElementById('toast'); document.getElementById('toast-txt').textContent=msg; el.classList.add('show'); clearTimeout(tT); tT=setTimeout(()=>el.classList.remove('show'),2600); }
+
+init();
+</script>
+</body>
+</html>
