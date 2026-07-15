@@ -247,14 +247,7 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
   </div>
 </div>
 
-<div class="trusted">
-  <div class="wrap">
-    <p>Aula virtual oficial de Servienvia</p>
-    <div class="logos">
-      <span>NovaTech</span><span>Universidad Andes</span><span>Lumen</span><span>Cordia</span><span>EduPro</span><span>Vértice</span>
-    </div>
-  </div>
-</div>
+
 
 <section class="block">
   <div class="wrap">
@@ -382,8 +375,11 @@ async function setupCats(){
     <div class="cat" data-cat="${c.nombre}" onclick="filtrarCategoria('${c.nombre}')">
       <div class="ic">${c.icono || ''}</div><h3>${c.nombre}</h3><small>Ver cursos</small>
     </div>`).join('');
-  document.getElementById('dropdown-cats').innerHTML = CATS.map(c=>`
-    <a onclick="filtrarCategoria('${c.nombre}')">${c.nombre} <span>›</span></a>`).join('');
+  const catDrop = document.getElementById('hd-cat-dropdown');
+  if (catDrop) {
+    catDrop.innerHTML = CATS.map(c=>`
+      <a href="#" onclick="event.preventDefault(); filtrarCategoria('${c.nombre}')">${c.nombre} <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="float:right;margin-top:2px"><path d="m9 18 6-6-6-6"/></svg></a>`).join('');
+  }
   document.getElementById('skills').innerHTML = SKILLS.map(s=>`<span class="skill" onclick="buscar('${s}')">${s}</span>`).join('');
 }
 
