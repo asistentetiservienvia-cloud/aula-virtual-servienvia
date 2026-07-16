@@ -1,4 +1,9 @@
 /* public/css/header.css */
+/* Deshabilitar zoom por doble toque (double-tap to zoom) en elementos interactivos, 
+   permitiendo que el usuario aún pueda hacer zoom estirando la pantalla con los dedos (pinch-to-zoom) */
+a, button, input, select, textarea {
+  touch-action: manipulation;
+}
 header.hd-wrapper {
   background: transparent !important;
   border: none !important;
