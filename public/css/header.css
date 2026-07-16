@@ -363,7 +363,7 @@ header.hd-wrapper {
   .hd-user-info { display: none; }
   .hd-logout::after { display: none; }
 }
-/* Modal Global de Registro/Enseñar */
+/* Modal Global de Registro/Enseï¿½ar */
 .modal-teach-overlay{position:fixed;inset:0;z-index:9999;background:rgba(16,10,42,.6);display:none;align-items:center;justify-content:center;padding:24px;animation:mto-fade .25s ease}
 .modal-teach-overlay.show{display:flex}
 @keyframes mto-fade{from{opacity:0}to{opacity:1}}
@@ -379,3 +379,8 @@ header.hd-wrapper {
 .modal-teach-contact-email{font-size:16px;font-weight:700;color:#139DCB;word-break:break-all}
 .modal-teach-cta{width:100%;justify-content:center}
 @media(max-width:500px){.modal-teach{padding:32px 24px 26px} .modal-teach h2{font-size:22px}}
+
+.modal-teach-overlay.hide{animation:mto-fade-out .25s ease forwards}
+.modal-teach-overlay.hide .modal-teach{animation:mto-pop-out .25s ease forwards}
+@keyframes mto-fade-out{0%{opacity:1}100%{opacity:0}}
+@keyframes mto-pop-out{0%{transform:scale(1);opacity:1}100%{transform:scale(.92);opacity:0}}

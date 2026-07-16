@@ -131,6 +131,10 @@ tbody tr:hover{background:#faf8ff}
 .tinfo{padding:13px 18px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);background:var(--bg)}
 .modal-bg{position:fixed;inset:0;background:rgba(20,15,40,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:20px;z-index:100;animation:fade .2s}
 .modal-bg.show{display:flex}
+.modal-bg.hide{animation:fadeOut .2s forwards}
+.modal-bg.hide .modal{animation:popOut .2s forwards}
+@keyframes fadeOut{to{opacity:0}}
+@keyframes popOut{to{transform:scale(.92);opacity:0}}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 .modal{background:#fff;border-radius:22px;max-width:480px;width:100%;padding:30px;box-shadow:0 30px 60px -20px rgba(0,0,0,.4);position:relative;animation:pop .3s;max-height:92vh;overflow-y:auto}
 @keyframes pop{from{transform:scale(.93);opacity:0}to{transform:scale(1)}}
@@ -858,7 +862,13 @@ async function guardarLeccion() {
   finally { btn.disabled = false; btn.textContent = 'Guardar Lección'; }
 }
 
-function close(id){ document.getElementById(id).classList.remove('show'); }
+function close(id) {
+  const el = document.getElementById(id);
+  if (el && el.classList.contains('show')) {
+    el.classList.add('hide');
+    setTimeout(() => { el.classList.remove('show', 'hide'); }, 190);
+  }
+}
 // Añadir soporte para cerrar al hacer clic fuera a todos los modals.
 
 
@@ -1074,9 +1084,9 @@ async function confirmDel(){
 }
 
 function show(id){ document.getElementById(id).classList.add('show'); }
-function closeForm(){ document.getElementById('modal-form').classList.remove('show'); }
-function closeDel(){ document.getElementById('modal-del').classList.remove('show'); }
-document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show');}));
+function closeForm(){ close('modal-form'); }
+function closeDel(){ close('modal-del'); }
+document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)close(m.id);}));
 
 function logout(){
   localStorage.removeItem('avs_token');

@@ -177,9 +177,13 @@ window.abrirModalEnsenar = function(){
 };
 window.cerrarModalEnsenar = function(){
   const m = document.getElementById('modal-teach');
-  if(m) {
-    m.classList.remove('show');
-    document.body.style.overflow='auto';
+  if(m && m.classList.contains('show')) {
+    m.classList.add('hide');
+    setTimeout(() => {
+      m.classList.remove('show');
+      m.classList.remove('hide');
+      document.body.style.overflow='auto';
+    }, 230);
   }
 };
 document.addEventListener('keydown', function(e){
