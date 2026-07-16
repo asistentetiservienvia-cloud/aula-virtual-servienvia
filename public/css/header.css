@@ -325,7 +325,7 @@ header.hd-wrapper {
     padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
   }
   /* Ítems del menú móvil apilados con estilo tipo "list item" */
-  .hd-profile, .hd-logout, .hd-btn-ghost, .hd-btn-solid {
+  .hd-profile, .hd-logout {
     padding: 12px 14px;
     border-radius: 12px;
     display: flex; align-items: center; gap: 10px;
@@ -347,11 +347,14 @@ header.hd-wrapper {
   .hd-profile .hd-av {
     width: 28px; height: 28px; font-size: 11px;
   }
+  .hd-btn-ghost, .hd-btn-solid { 
+    text-align: center; 
+    justify-content: center;
+    margin-top: 4px;
+  }
 }
 /* En escritorio ocultamos el bloque hd-user-info (queda solo el avatar mini) */
 @media (min-width: 769px) {
   .hd-user-info { display: none; }
   .hd-logout::after { display: none; }
-}
-  .hd-profile { justify-content: space-between; padding: 6px 14px 6px 6px; }
 }
