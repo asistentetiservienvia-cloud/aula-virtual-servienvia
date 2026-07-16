@@ -496,6 +496,24 @@ document.addEventListener('DOMContentLoaded', () => {
       if(window.innerWidth <= 860) cerrarAdminMenu();
     });
   });
+
+  // Swipe para cerrar el menú lateral en móviles
+  const sidebar = document.querySelector('.sidebar');
+  let touchStartX = 0;
+  let touchStartY = 0;
+  sidebar.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, {passive: true});
+  sidebar.addEventListener('touchend', e => {
+    if (window.innerWidth > 860) return;
+    let touchEndX = e.changedTouches[0].screenX;
+    let touchEndY = e.changedTouches[0].screenY;
+    // Si el deslizamiento horizontal es mayor a 40px y el vertical menor a 40px (no es un scroll)
+    if (Math.abs(touchEndX - touchStartX) > 40 && Math.abs(touchEndY - touchStartY) < 40) {
+      cerrarAdminMenu();
+    }
+  }, {passive: true});
 });
 
 
