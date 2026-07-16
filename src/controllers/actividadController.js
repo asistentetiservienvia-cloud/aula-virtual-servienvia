@@ -23,9 +23,12 @@ async function listar(req, res, next) {
       return d.toISOString().slice(0, 10);
     };
 
-    // Racha: días consecutivos hasta hoy con minutos > 0
+    // Racha: días consecutivos (tolerando si aún no ha estudiado hoy)
     let racha = 0;
-    for (let i = 0; ; i++) {
+    if (porFecha.has(clave(0)) && porFecha.get(clave(0)) > 0) {
+      racha++;
+    }
+    for (let i = 1; ; i++) {
       const k = clave(i);
       if (porFecha.has(k) && porFecha.get(k) > 0) racha++;
       else break;
