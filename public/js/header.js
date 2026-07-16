@@ -129,3 +129,16 @@ function hdLogout() {
   localStorage.removeItem('avs_usuario');
   window.location.replace('/login.html');
 }
+
+// Interceptar clics en cualquier botón de "Regístrate" para mostrar el modal de contacto
+document.addEventListener('click', e => {
+  const btn = e.target.closest('a[href="/registro.html"]');
+  if (btn) {
+    e.preventDefault();
+    if (typeof abrirModalEnsenar === 'function') {
+      abrirModalEnsenar();
+    } else {
+      window.location.href = '/?registro=true';
+    }
+  }
+});

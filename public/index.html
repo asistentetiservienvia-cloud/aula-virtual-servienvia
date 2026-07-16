@@ -569,19 +569,23 @@ carEl.addEventListener('touchend', e => {
   }
 })();
 
-// --- Modal "¿Quieres ser instructor?" ---
+// Control del Modal Enseñar
 function abrirModalEnsenar(){
   document.getElementById('modal-teach').classList.add('show');
   document.body.style.overflow='hidden';
 }
 function cerrarModalEnsenar(){
   document.getElementById('modal-teach').classList.remove('show');
-  document.body.style.overflow='';
+  document.body.style.overflow='auto';
 }
-// Cerrar al hacer clic en el overlay (fuera del contenido del modal)
 document.getElementById('modal-teach').addEventListener('click', function(e){
   if(e.target === this) cerrarModalEnsenar();
 });
+
+// Comprobar si venimos de un clic a "Regístrate" desde otra página
+if (window.location.search.includes('registro=true')) {
+  setTimeout(() => abrirModalEnsenar(), 300);
+}
 // Cerrar con Escape
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') cerrarModalEnsenar();
