@@ -31,6 +31,18 @@ button{font-family:inherit}
   }
   .sidebar.open{transform:translateX(0)}
   .hamburger-btn{display:inline-flex}
+  .mobile-header { display: flex; }
+}
+.mobile-header {
+  display: none;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 18px;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 .hamburger-btn{
   display:none;align-items:center;justify-content:center;
@@ -149,6 +161,12 @@ tbody tr:hover{background:#faf8ff}
 </head>
 <body>
 <div class="app">
+  <div class="mobile-header">
+    <button class="hamburger-btn" aria-label="Abrir menú" onclick="toggleAdminMenu()">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+    </button>
+    <div class="brand" style="color:var(--ink); padding:0; font-size:20px"><span class="dot"></span>Aula Virtual</div>
+  </div>
   <aside class="sidebar">
     <div class="brand"><span class="dot"></span>Aula Virtual</div>
     <div class="nav-lbl">Administración</div>
@@ -170,9 +188,6 @@ tbody tr:hover{background:#faf8ff}
   <main class="main">
     <div id="view-usuarios">
     <div class="topline">
-      <button id="admin-menu-toggle" class="hamburger-btn" aria-label="Abrir menú">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-      </button>
       <h1>Gestión de usuarios</h1>
       <button class="btn btn-solid" onclick="openCrear()">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
@@ -222,9 +237,6 @@ tbody tr:hover{background:#faf8ff}
     <!-- VISTA CURSOS -->
     <div id="view-cursos" style="display:none">
       <div class="topline">
-        <button class="hamburger-btn" aria-label="Abrir menú" onclick="toggleAdminMenu()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
         <h1>Gestión de cursos</h1>
         <button class="btn btn-solid" onclick="openCrearCurso()">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
@@ -251,9 +263,6 @@ tbody tr:hover{background:#faf8ff}
     <!-- VISTA CATEGORIAS -->
     <div id="view-categorias" style="display:none">
       <div class="topline">
-        <button class="hamburger-btn" aria-label="Abrir menú" onclick="toggleAdminMenu()">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        </button>
         <h1>Gestión de categorías</h1>
         <button class="btn btn-ghost" style="margin-right:10px" onclick="fixEmojis()" id="btn-fix">✨ Autocorregir Emojis Viejos</button>
         <button class="btn btn-solid" onclick="openCrearCategoria()">
