@@ -2,7 +2,7 @@
 
 > Este archivo es la **fuente única de verdad** sobre el estado del proyecto: qué está hecho, qué está pendiente y las decisiones importantes. Actualízalo cada vez que hagas cambios significativos.
 
-**Última actualización:** iteración 8 (limpieza de deuda técnica)
+**Última actualización:** iteración 9 (responsive, bugs de UX y modal de contacto)
 **Stack:** Node.js + Express + PostgreSQL (Neon en producción; pg-mem para tests y modo demo)
 **Frontend:** HTML + CSS + JavaScript vanilla, servido por el mismo servicio Node
 **Despliegue objetivo:** Vercel (Hobby / gratis) + Neon (Free / gratis)
@@ -23,7 +23,38 @@
 
 ## 2. Historial de iteraciones
 
-### Iteración 8 — Limpieza de deuda técnica *(actual, hecha por Claude)*
+### Iteración 9 — Responsive, bugs de UX y modal de contacto *(actual, hecha por Claude)*
+
+Iteración enfocada 100% en frontend: ajustes responsive, corrección de bugs visibles en producción y una funcionalidad nueva (modal de contacto para instructores). Sin cambios en backend, BD, tests. **41/41 pruebas siguen pasando.**
+
+**Ajustes responsive:**
+- **Reproductor:** el título del curso (`.ctitle`) se oculta en pantallas ≤600px para liberar espacio en el header, que en móvil solo compite con progreso y botón volver. Añadido `padding-top:24px` al `.layout` en ≤700px para que el video no quede tapado por el header.
+- **Dashboard:** añadido `padding-top:60px` al `.hero` en ≤700px porque el header flotante (`hd-wrapper`, sticky con `top:16px`) tapaba la primera tarjeta del panel "Mi aprendizaje".
+- **Admin:** implementado menú hamburguesa con sidebar deslizante desde la izquierda. En ≤860px la sidebar pasa de `display:none` a `position:fixed` fuera de pantalla con `transform:translateX(-100%)`; al pulsar el botón hamburguesa (visible en las 3 vistas: Usuarios, Cursos, Categorías) se añade la clase `.open` y desliza suavemente. Overlay oscuro (`.admin-overlay`) para cerrar al tocar fuera. Al tocar cualquier enlace del sidebar en móvil, se cierra automáticamente. **En escritorio (>860px) no cambió nada visual.**
+- **Admin (tabla de usuarios):** añadido `overflow-x:auto` al `.table-wrap` y `min-width:640px` a la tabla para forzar scroll horizontal en móvil sin cambiar la estructura de las filas.
+
+**Bugs corregidos:**
+- **Barra "API conectada":** en Home, la pill informativa (position:fixed bottom-right) tapaba la última fila de categorías en móvil. Ahora se autooculta tras 4 segundos si la conexión fue exitosa (transición suave con `transform` + `opacity`). Solo persiste visible si hay error. Además, `body{padding-bottom:64px}` en ≤700px como margen de seguridad.
+- **Botón "atrás" del móvil con comportamiento errático:** el bug se producía porque logouts y guards de sesión usaban `location.href = '/login.html'` (que preserva historial) en vez de `location.replace()`. Consecuencia: tras logout, el botón atrás del navegador volvía al Dashboard sin sesión, el guard te tiraba de nuevo a login, se generaba un loop errático. **Corregido en:** `login.html` (3 redirects tras login exitoso), `dashboard.html` (guard + logout), `admin.html` (guard + logout, 2 ocurrencias), `js/header.js` (logout global). Total: **8 navegaciones** cambiadas de `href` a `replace()`.
+- **Botón "Volver" del reproductor:** ahora usa `history.back()` si hay historial (respeta el flujo real del usuario: si venías del Dashboard, vuelves al Dashboard; si venías del Home, vuelves al Home). Si no hay historial (link directo), redirige al Dashboard o Home según sesión.
+- **Dropdown "Explorar cursos":** en escritorio se abría solo por hover, sin forma de cerrarlo con clic. Ahora también se puede abrir/cerrar con clic (toggle en el propio botón) y se cierra al hacer clic fuera del dropdown. En móvil sigue funcionando como antes (por clic en la hamburguesa). Se preserva el efecto hover en escritorio. Añadida rotación del ícono de flecha (`hd-arrow`) cuando el dropdown está abierto por clic.
+
+**Funcionalidad nueva:**
+- **Modal "¿Quieres ser instructor?":** el botón "Empieza a enseñar" (slide 2 del hero) ya no redirige a `/login.html`. Ahora abre un modal centrado con:
+  - Ícono de gorro de graduación (SVG inline).
+  - Texto explicando cómo integrarse al equipo de instructores.
+  - Correo de contacto destacado como `<a href="mailto:...">`.
+  - Botón "Entendido" para cerrar.
+  - Cierre también por: clic en overlay, botón ×, tecla Escape.
+- **⚠️ Pendiente:** el correo de contacto está como placeholder `administracion@servienvia.com`. Cuando el usuario tenga el correo real de RRHH/administración, hay que sustituirlo en `public/index.html` (busca `mailto:administracion@servienvia.com`).
+
+**Detalles técnicos honestos:**
+- Al reproductor le sigue sobrando el bloque CSS del "header oscuro" antiguo (línea 24 de `reproductor.html`), que ahora convive con el header modular (`hd-wrapper`) inyectado por Antigravity en la iteración 7. Los dos no se pisan visualmente porque el modular tiene `!important` en `background:transparent`, pero es deuda técnica que conviene limpiar en una futura iteración.
+- No se tocaron las páginas de contenido (`acerca-de`, `contacto`, `quienes-somos`, `privacidad-terminos`, `soporte`). Por decisión del usuario. Sus media queries actuales apuntan a clases del Home que no existen en esas páginas — no rompen nada, pero son código muerto.
+
+**Archivos tocados:** `public/reproductor.html`, `public/admin.html`, `public/dashboard.html`, `public/index.html`, `public/login.html`, `public/css/header.css`, `public/js/header.js`, `CAMBIOS.md`.
+
+### Iteración 8 — Limpieza de deuda técnica *(hecha por Claude)*
 
 Correcciones críticas a los cambios de la iteración 7:
 

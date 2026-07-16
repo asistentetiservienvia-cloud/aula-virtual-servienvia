@@ -250,10 +250,10 @@ async function handleLogin(){
 
     setTimeout(() => {
       if (u.rol === 'administrador') {
-        window.location.href = '/admin.html';
+        window.location.replace('/admin.html');
       } else {
         // Estudiantes, instructores e instituciones van a su panel de aprendizaje.
-        window.location.href = '/dashboard.html';
+        window.location.replace('/dashboard.html');
       }
     }, 1400);
   } catch (e) {
@@ -275,7 +275,7 @@ function rolLabel(rol){
   if (tk && u && u.rol === 'administrador') {
     // Validar el token contra /me antes de redirigir
     fetch(API + '/api/auth/me', { headers: { Authorization: 'Bearer ' + tk } })
-      .then(r => { if (r.ok) window.location.href = '/admin.html'; });
+      .then(r => { if (r.ok) window.location.replace('/admin.html'); });
   }
 })();
 </script>

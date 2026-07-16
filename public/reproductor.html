@@ -34,6 +34,8 @@ header .back:hover{background:rgba(255,255,255,.22)}
 
 .layout{display:grid;grid-template-columns:1fr 360px;min-height:calc(100vh - 62px)}
 @media(max-width:980px){.layout{grid-template-columns:1fr}}
+@media(max-width:700px){.layout{padding-top:24px}}
+@media(max-width:600px){header .ctitle{display:none}}
 
 /* PLAYER */
 .player-col{padding:0}
@@ -553,7 +555,15 @@ function togglePlay(){
   } else { clearInterval(timer); }
 }
 
-function volver(){ location.href = (TOKEN && SESION) ? '/dashboard.html' : '/'; }
+function volver(){
+  // Si hay historial, volvemos a la página anterior (respeta el flujo real del usuario).
+  // Si no lo hay (llegó por link directo), redirigimos al dashboard o al home.
+  if (window.history.length > 1) {
+    window.history.back();
+  } else {
+    location.assign((TOKEN && SESION) ? '/dashboard.html' : '/');
+  }
+}
 function errorPantalla(msg){
   document.getElementById('app').innerHTML = `<div class="center-state">
     <div class="ic"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg></div>

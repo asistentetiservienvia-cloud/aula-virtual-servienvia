@@ -116,10 +116,14 @@ header.hd-wrapper {
   display: grid;
   gap: 4px;
 }
-.hd-dropdown-wrapper:hover .hd-dropdown {
+.hd-dropdown-wrapper:hover .hd-dropdown,
+.hd-dropdown-wrapper.open .hd-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+.hd-dropdown-wrapper.open .hd-link svg.hd-arrow {
+  transform: rotate(180deg);
 }
 .hd-drop-item {
   display: flex;
