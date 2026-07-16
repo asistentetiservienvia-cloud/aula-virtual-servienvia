@@ -509,8 +509,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth > 860) return;
     let touchEndX = e.changedTouches[0].screenX;
     let touchEndY = e.changedTouches[0].screenY;
-    // Si el deslizamiento es hacia la IZQUIERDA (touchStartX > touchEndX) en más de 40px
-    if ((touchStartX - touchEndX) > 40 && Math.abs(touchEndY - touchStartY) < 40) {
+    // Si el deslizamiento es hacia la DERECHA (touchEndX > touchStartX) en más de 40px
+    if ((touchEndX - touchStartX) > 40 && Math.abs(touchEndY - touchStartY) < 40) {
       cerrarAdminMenu();
     }
   }, {passive: true});
