@@ -91,6 +91,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Dropdown "Explorar cursos": abrir/cerrar por clic (además del hover en escritorio)
+  const dropWrapper = document.querySelector('.hd-dropdown-wrapper');
+  if(dropWrapper) {
+    const dropLink = dropWrapper.querySelector('.hd-link');
+    if(dropLink) {
+      dropLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        dropWrapper.classList.toggle('open');
+      });
+    }
+    // Cerrar al hacer clic fuera del dropdown
+    document.addEventListener('click', (e) => {
+      if(!dropWrapper.contains(e.target)) {
+        dropWrapper.classList.remove('open');
+      }
+    });
+  }
+
   // Cargar categorías dinámicamente en el dropdown
   const catDrop = document.getElementById('hd-cat-dropdown');
   if(catDrop) {
