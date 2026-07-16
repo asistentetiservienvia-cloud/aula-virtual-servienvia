@@ -135,10 +135,53 @@ document.addEventListener('click', e => {
   const btn = e.target.closest('a[href="/registro.html"]');
   if (btn) {
     e.preventDefault();
-    if (typeof abrirModalEnsenar === 'function') {
-      abrirModalEnsenar();
-    } else {
-      window.location.href = '/?registro=true';
-    }
+    if (typeof abrirModalEnsenar === 'function') abrirModalEnsenar();
   }
+});
+
+// Inyectar el modal de contacto globalmente si no existe
+document.addEventListener('DOMContentLoaded', () => {
+  if (!document.getElementById('modal-teach')) {
+    const modalHTML = `
+    <div class="modal-teach-overlay" id="modal-teach">
+      <div class="modal-teach">
+        <button class="modal-teach-close" onclick="cerrarModalEnsenar()" aria-label="Cerrar">&times;</button>
+        <div class="modal-teach-icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+        <h2>¿Quieres ser instructor?</h2>
+        <p>Si quieres formar parte de nuestro equipo de instructores y compartir tu conocimiento en Aula Virtual Servienvia, comunícate con nuestros administradores. Estaremos encantados de conversar contigo sobre cómo integrarte.</p>
+        <div class="modal-teach-contact">
+          <div class="modal-teach-contact-label">Escríbenos a</div>
+          <a class="modal-teach-contact-email" href="mailto:administracion@servienvia.com">administracion@servienvia.com</a>
+        </div>
+        <button class="hd-btn-solid modal-teach-cta" style="width:100%; border:none; justify-content:center; cursor:pointer;" onclick="cerrarModalEnsenar()">Entendido</button>
+      </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+    
+    document.getElementById('modal-teach').addEventListener('click', function(e){
+      if(e.target === this) cerrarModalEnsenar();
+    });
+  }
+});
+
+window.abrirModalEnsenar = function(){
+  const m = document.getElementById('modal-teach');
+  if(m) {
+    m.classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+};
+window.cerrarModalEnsenar = function(){
+  const m = document.getElementById('modal-teach');
+  if(m) {
+    m.classList.remove('show');
+    document.body.style.overflow='auto';
+  }
+};
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') cerrarModalEnsenar();
 });

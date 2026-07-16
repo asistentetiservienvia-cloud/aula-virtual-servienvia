@@ -363,3 +363,19 @@ header.hd-wrapper {
   .hd-user-info { display: none; }
   .hd-logout::after { display: none; }
 }
+/* Modal Global de Registro/Enseñar */
+.modal-teach-overlay{position:fixed;inset:0;z-index:9999;background:rgba(16,10,42,.6);display:none;align-items:center;justify-content:center;padding:24px;animation:mto-fade .25s ease}
+.modal-teach-overlay.show{display:flex}
+@keyframes mto-fade{from{opacity:0}to{opacity:1}}
+.modal-teach{background:#fff;border-radius:24px;max-width:480px;width:100%;padding:40px 36px 32px;box-shadow:0 30px 60px -20px rgba(0,0,0,.4);position:relative;text-align:center;animation:mto-pop .3s ease}
+@keyframes mto-pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-teach-close{position:absolute;top:14px;right:16px;background:none;border:0;font-size:32px;line-height:1;cursor:pointer;color:#6a6f73;width:36px;height:36px;border-radius:50%;transition:.2s}
+.modal-teach-close:hover{background:#fbfaff;color:#1b1c20}
+.modal-teach-icon{width:72px;height:72px;border-radius:20px;margin:0 auto 18px;background:linear-gradient(135deg,#139DCB,#8a5cff);display:grid;place-items:center;color:#fff}
+.modal-teach h2{font-family:'Fraunces',serif;font-weight:900;font-size:26px;margin-bottom:12px;color:#1b1c20;line-height:1.15}
+.modal-teach p{color:#6a6f73;font-size:15.5px;line-height:1.55;margin-bottom:22px}
+.modal-teach-contact{background:#fbfaff;border:1px solid #e7e3f0;border-radius:14px;padding:16px 20px;margin-bottom:22px}
+.modal-teach-contact-label{font-size:12px;color:#6a6f73;text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:6px}
+.modal-teach-contact-email{font-size:16px;font-weight:700;color:#139DCB;word-break:break-all}
+.modal-teach-cta{width:100%;justify-content:center}
+@media(max-width:500px){.modal-teach{padding:32px 24px 26px} .modal-teach h2{font-size:22px}}
