@@ -23,7 +23,27 @@ h1,h2,h3{font-family:'Fraunces',serif;font-weight:900;letter-spacing:-.02em;line
 a{color:inherit;text-decoration:none}
 button{font-family:inherit}
 .app{display:grid;grid-template-columns:248px 1fr;min-height:100vh}
-@media(max-width:860px){.app{grid-template-columns:1fr}.sidebar{display:none}}
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .sidebar{
+    position:fixed;top:0;left:0;width:280px;max-width:85vw;height:100vh;z-index:200;
+    transform:translateX(-100%);transition:transform .3s ease
+  }
+  .sidebar.open{transform:translateX(0)}
+  .hamburger-btn{display:inline-flex}
+}
+.hamburger-btn{
+  display:none;align-items:center;justify-content:center;
+  width:44px;height:44px;border:1px solid var(--line);background:var(--card);
+  border-radius:12px;color:var(--ink);cursor:pointer;flex-shrink:0
+}
+.hamburger-btn:hover{background:var(--bg)}
+.admin-overlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;
+  animation:fadeInOverlay .2s ease
+}
+.admin-overlay.open{display:block}
+@keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
 .sidebar{background:#161320;color:#cfc9dd;display:flex;flex-direction:column;padding:22px 16px;position:sticky;top:0;height:100vh}
 .brand{font-family:'Fraunces',serif;font-weight:900;font-size:23px;color:#fff;display:flex;align-items:center;gap:8px;padding:6px 10px 22px}
 .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--accent)}
@@ -66,8 +86,8 @@ button{font-family:inherit}
 .fsearch svg{color:var(--muted);flex:none}
 .filters select{font:inherit;font-size:14px;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;outline:none;color:var(--ink)}
 .filters select:focus{border-color:var(--brand)}
-.table-wrap{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-sm)}
-table{width:100%;border-collapse:collapse}
+.table-wrap{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;overflow-x:auto;box-shadow:var(--shadow-sm)}
+table{width:100%;border-collapse:collapse;min-width:640px}
 thead th{text-align:left;font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:14px 18px;border-bottom:1px solid var(--line);background:var(--bg)}
 tbody td{padding:14px 18px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:middle}
 tbody tr:last-child td{border-bottom:none}
@@ -150,6 +170,9 @@ tbody tr:hover{background:#faf8ff}
   <main class="main">
     <div id="view-usuarios">
     <div class="topline">
+      <button id="admin-menu-toggle" class="hamburger-btn" aria-label="Abrir menú">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      </button>
       <h1>Gestión de usuarios</h1>
       <button class="btn btn-solid" onclick="openCrear()">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
@@ -199,6 +222,9 @@ tbody tr:hover{background:#faf8ff}
     <!-- VISTA CURSOS -->
     <div id="view-cursos" style="display:none">
       <div class="topline">
+        <button class="hamburger-btn" aria-label="Abrir menú" onclick="toggleAdminMenu()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
         <h1>Gestión de cursos</h1>
         <button class="btn btn-solid" onclick="openCrearCurso()">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
@@ -225,6 +251,9 @@ tbody tr:hover{background:#faf8ff}
     <!-- VISTA CATEGORIAS -->
     <div id="view-categorias" style="display:none">
       <div class="topline">
+        <button class="hamburger-btn" aria-label="Abrir menú" onclick="toggleAdminMenu()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
         <h1>Gestión de categorías</h1>
         <button class="btn btn-ghost" style="margin-right:10px" onclick="fixEmojis()" id="btn-fix">✨ Autocorregir Emojis Viejos</button>
         <button class="btn btn-solid" onclick="openCrearCategoria()">
@@ -250,6 +279,9 @@ tbody tr:hover{background:#faf8ff}
     </div>
   </main>
 </div>
+
+<!-- Overlay del menú lateral en móvil -->
+<div class="admin-overlay" id="admin-overlay" onclick="cerrarAdminMenu()"></div>
 
 <div class="modal-bg" id="modal-form">
   <div class="modal">
@@ -418,6 +450,26 @@ tbody tr:hover{background:#faf8ff}
 const API = window.location.origin;
 let TOKEN = localStorage.getItem('avs_token');
 let SESION = JSON.parse(localStorage.getItem('avs_usuario') || 'null');
+
+// --- Menú lateral móvil ---
+function toggleAdminMenu(){
+  document.querySelector('.sidebar').classList.toggle('open');
+  document.getElementById('admin-overlay').classList.toggle('open');
+}
+function cerrarAdminMenu(){
+  document.querySelector('.sidebar').classList.remove('open');
+  document.getElementById('admin-overlay').classList.remove('open');
+}
+document.addEventListener('DOMContentLoaded', () => {
+  const toggle = document.getElementById('admin-menu-toggle');
+  if(toggle) toggle.addEventListener('click', toggleAdminMenu);
+  // Al clic en cualquier enlace del sidebar, cerrar el menú (en móvil)
+  document.querySelectorAll('.sidebar .nav a').forEach(a => {
+    a.addEventListener('click', () => {
+      if(window.innerWidth <= 860) cerrarAdminMenu();
+    });
+  });
+});
 
 
 
@@ -767,7 +819,8 @@ function close(id){ document.getElementById(id).classList.remove('show'); }
 
 // Si no hay sesión o no es admin, volver al login.
 if (!TOKEN || !SESION || SESION.rol !== 'administrador') {
-  window.location.href = '/login.html';
+  window.location.replace('/login.html');
+  throw new Error('Acceso denegado, redirigiendo al login…');
 }
 
 let usuarios = [];
@@ -983,7 +1036,7 @@ document.querySelectorAll('.modal-bg').forEach(m=>m.addEventListener('click',e=>
 function logout(){
   localStorage.removeItem('avs_token');
   localStorage.removeItem('avs_usuario');
-  window.location.href = '/login.html';
+  window.location.replace('/login.html');
 }
 
 let tT;

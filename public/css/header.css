@@ -116,10 +116,14 @@ header.hd-wrapper {
   display: grid;
   gap: 4px;
 }
-.hd-dropdown-wrapper:hover .hd-dropdown {
+.hd-dropdown-wrapper:hover .hd-dropdown,
+.hd-dropdown-wrapper.open .hd-dropdown {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+.hd-dropdown-wrapper.open .hd-link svg.hd-arrow {
+  transform: rotate(180deg);
 }
 .hd-drop-item {
   display: flex;
@@ -238,16 +242,16 @@ header.hd-wrapper {
     top: calc(100% + 10px);
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(19, 157, 203, 0.15);
     border-radius: 24px;
     box-shadow: 0 10px 40px -10px rgba(19, 157, 203, 0.25);
-    padding: 20px;
+    padding: 14px;
     display: none;
     flex-direction: column;
-    gap: 16px;
+    gap: 0;
     max-height: 75vh;
     overflow-y: auto;
   }
@@ -261,14 +265,15 @@ header.hd-wrapper {
     width: 100%;
     flex-direction: column;
     align-items: stretch;
-    gap: 8px;
+    gap: 4px;
     margin: 0;
   }
   .hd-links {
     border-top: none;
     padding-top: 0;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    padding-bottom: 8px;
+    margin-bottom: 8px;
   }
   .hd-dropdown {
     position: static;
@@ -284,5 +289,69 @@ header.hd-wrapper {
     align-items: stretch;
   }
   .hd-btn-ghost, .hd-btn-solid { text-align: center; }
+
+  /* Info del usuario logueado (solo móvil) */
+  .hd-user-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 12px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .hd-user-av {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5b34d6, #9b6dff);
+    display: grid; place-items: center;
+    color: #fff; font-weight: 700; font-size: 15px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px -4px rgba(91, 52, 214, .5);
+  }
+  .hd-user-txt { flex: 1; min-width: 0; }
+  .hd-user-name {
+    font-weight: 700; font-size: 15px; color: #1b1c20;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .hd-user-mail {
+    font-size: 12.5px; color: #6a6f73;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    margin-top: 1px;
+  }
+  .hd-user-rol {
+    display: inline-block; margin-top: 6px;
+    font-size: 11px; font-weight: 700; letter-spacing: .04em;
+    color: #5b34d6; background: rgba(91,52,214,.1);
+    padding: 3px 10px; border-radius: 999px; text-transform: uppercase;
+  }
+  /* Ítems del menú móvil apilados con estilo tipo "list item" */
+  .hd-profile, .hd-logout, .hd-btn-ghost, .hd-btn-solid {
+    padding: 12px 14px;
+    border-radius: 12px;
+    display: flex; align-items: center; gap: 10px;
+    justify-content: flex-start;
+    background: transparent !important;
+    border: none !important;
+  }
+  .hd-profile:hover, .hd-logout:hover {
+    background: rgba(19, 157, 203, 0.08) !important;
+  }
+  .hd-logout {
+    color: #c14a4a;
+    font-size: 14.5px;
+    font-weight: 600;
+  }
+  .hd-logout::after {
+    content: 'Cerrar sesión';
+  }
+  .hd-profile .hd-av {
+    width: 28px; height: 28px; font-size: 11px;
+  }
+}
+/* En escritorio ocultamos el bloque hd-user-info (queda solo el avatar mini) */
+@media (min-width: 769px) {
+  .hd-user-info { display: none; }
+  .hd-logout::after { display: none; }
+}
   .hd-profile { justify-content: space-between; padding: 6px 14px 6px 6px; }
 }

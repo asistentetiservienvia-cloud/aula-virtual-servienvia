@@ -155,9 +155,62 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
 @media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr 1fr}}
 @media(max-width:600px){.foot-grid{grid-template-columns:1fr 1fr}}
 
-.api-pill{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:700;color:var(--accent);box-shadow:var(--shadow-sm);z-index:60;display:flex;align-items:center;gap:7px}
+.api-pill{position:fixed;bottom:18px;right:18px;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;font-size:12px;font-weight:700;color:var(--accent);box-shadow:var(--shadow-sm);z-index:60;display:flex;align-items:center;gap:7px;transition:opacity .5s ease, transform .5s ease}
+.api-pill.hide{opacity:0;transform:translateY(20px);pointer-events:none}
 .api-pill .d{width:8px;height:8px;border-radius:50%;background:var(--accent)}
 .api-pill.err{color:var(--muted)}.api-pill.err .d{background:#c9c2da}
+@media(max-width:700px){body{padding-bottom:64px}}
+
+/* Modal "¿Quieres ser instructor?" */
+.modal-teach-overlay{
+  position:fixed;inset:0;z-index:1000;background:rgba(16,10,42,.6);
+  display:none;align-items:center;justify-content:center;padding:24px;
+  animation:mto-fade .25s ease
+}
+.modal-teach-overlay.show{display:flex}
+@keyframes mto-fade{from{opacity:0}to{opacity:1}}
+.modal-teach{
+  background:#fff;border-radius:24px;max-width:480px;width:100%;
+  padding:40px 36px 32px;box-shadow:0 30px 60px -20px rgba(0,0,0,.4);
+  position:relative;text-align:center;animation:mto-pop .3s ease
+}
+@keyframes mto-pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-teach-close{
+  position:absolute;top:14px;right:16px;background:none;border:0;
+  font-size:32px;line-height:1;cursor:pointer;color:var(--muted);
+  width:36px;height:36px;border-radius:50%;transition:.2s
+}
+.modal-teach-close:hover{background:var(--bg);color:var(--ink)}
+.modal-teach-icon{
+  width:72px;height:72px;border-radius:20px;margin:0 auto 18px;
+  background:linear-gradient(135deg,var(--brand),#8a5cff);
+  display:grid;place-items:center;color:#fff
+}
+.modal-teach h2{
+  font-family:'Fraunces',serif;font-weight:900;font-size:26px;
+  margin-bottom:12px;color:var(--ink);line-height:1.15
+}
+.modal-teach p{
+  color:var(--muted);font-size:15.5px;line-height:1.55;margin-bottom:22px
+}
+.modal-teach-contact{
+  background:var(--bg);border:1px solid var(--line);border-radius:14px;
+  padding:16px 20px;margin-bottom:22px
+}
+.modal-teach-contact-label{
+  font-size:12px;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.08em;font-weight:700;margin-bottom:6px
+}
+.modal-teach-contact-email{
+  font-size:16px;font-weight:700;color:var(--brand);word-break:break-all
+}
+.modal-teach-cta{
+  width:100%;justify-content:center
+}
+@media(max-width:500px){
+  .modal-teach{padding:32px 24px 26px}
+  .modal-teach h2{font-size:22px}
+}
 </style>
   <link rel="stylesheet" href="/css/header.css">
 </head>
@@ -195,6 +248,14 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
       </div>
 
       <div class="hd-right" id="hd-logged-in" style="display: none;">
+        <div class="hd-user-info" id="hd-user-info">
+          <div class="hd-user-av" id="hd-user-av">··</div>
+          <div class="hd-user-txt">
+            <div class="hd-user-name" id="hd-user-name">—</div>
+            <div class="hd-user-mail" id="hd-user-mail">—</div>
+            <div class="hd-user-rol" id="hd-user-rol">—</div>
+          </div>
+        </div>
         <a class="hd-profile" href="/dashboard.html" id="hd-av-link">
           <div class="hd-av" id="hd-av">··</div>
           Mi Panel
@@ -224,7 +285,7 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
         <div class="slide-content">
           <h1>¿Eres experto en tu área?<br>Enseña al mundo</h1>
           <p>Únete a nuestra red de instructores, publica tus cursos fácilmente, gestiona inscripciones y ayuda a miles de estudiantes a transformar sus vidas.</p>
-          <button class="btn btn-solid btn-slide" onclick="location.href='/login.html'">Empieza a enseñar</button>
+          <button class="btn btn-solid btn-slide" onclick="abrirModalEnsenar()">Empieza a enseñar</button>
         </div>
         <div class="slide-img">
           <img src="/images/slide2.png" alt="Instructor grabando">
@@ -333,6 +394,25 @@ footer{background:#111111;color:#dddddd;padding:60px 0 40px;font-family:'Plus Ja
 
 <div class="api-pill" id="api-pill"><span class="d"></span><span id="api-pill-txt">Conectando con la API…</span></div>
 
+<!-- Modal: quiero ser instructor -->
+<div class="modal-teach-overlay" id="modal-teach">
+  <div class="modal-teach">
+    <button class="modal-teach-close" onclick="cerrarModalEnsenar()" aria-label="Cerrar">&times;</button>
+    <div class="modal-teach-icon">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      </svg>
+    </div>
+    <h2>¿Quieres ser instructor?</h2>
+    <p>Si quieres formar parte de nuestro equipo de instructores y compartir tu conocimiento en Aula Virtual Servienvia, comunícate con nuestros administradores. Estaremos encantados de conversar contigo sobre cómo integrarte.</p>
+    <div class="modal-teach-contact">
+      <div class="modal-teach-contact-label">Escríbenos a</div>
+      <a class="modal-teach-contact-email" href="mailto:administracion@servienvia.com">administracion@servienvia.com</a>
+    </div>
+    <button class="btn btn-solid modal-teach-cta" onclick="cerrarModalEnsenar()">Entendido</button>
+  </div>
+</div>
+
 <script>
 const API = window.location.origin;
 const SESION = JSON.parse(localStorage.getItem('avs_usuario') || 'null');
@@ -403,7 +483,12 @@ async function cargarCursos(params = {}){
 function pill(ok, txt){
   const p = document.getElementById('api-pill');
   p.classList.toggle('err', !ok);
+  p.classList.remove('hide');
   document.getElementById('api-pill-txt').textContent = txt;
+  // Si la conexión fue exitosa, ocultar tras 4 segundos
+  if(ok){
+    setTimeout(() => { p.classList.add('hide'); }, 4000);
+  }
 }
 
 function buscar(texto){
@@ -483,6 +568,24 @@ carEl.addEventListener('touchend', e => {
     cargarCursos();
   }
 })();
+
+// --- Modal "¿Quieres ser instructor?" ---
+function abrirModalEnsenar(){
+  document.getElementById('modal-teach').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function cerrarModalEnsenar(){
+  document.getElementById('modal-teach').classList.remove('show');
+  document.body.style.overflow='';
+}
+// Cerrar al hacer clic en el overlay (fuera del contenido del modal)
+document.getElementById('modal-teach').addEventListener('click', function(e){
+  if(e.target === this) cerrarModalEnsenar();
+});
+// Cerrar con Escape
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') cerrarModalEnsenar();
+});
 </script>
   <script src="/js/header.js"></script>
 </body>

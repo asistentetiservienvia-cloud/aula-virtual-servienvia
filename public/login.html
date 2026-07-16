@@ -107,6 +107,14 @@ footer{text-align:center;padding:22px;color:var(--muted);font-size:13px;border-t
       </div>
 
       <div class="hd-right" id="hd-logged-in" style="display: none;">
+        <div class="hd-user-info" id="hd-user-info">
+          <div class="hd-user-av" id="hd-user-av">··</div>
+          <div class="hd-user-txt">
+            <div class="hd-user-name" id="hd-user-name">—</div>
+            <div class="hd-user-mail" id="hd-user-mail">—</div>
+            <div class="hd-user-rol" id="hd-user-rol">—</div>
+          </div>
+        </div>
         <a class="hd-profile" href="/dashboard.html" id="hd-av-link">
           <div class="hd-av" id="hd-av">··</div>
           Mi Panel
@@ -250,10 +258,10 @@ async function handleLogin(){
 
     setTimeout(() => {
       if (u.rol === 'administrador') {
-        window.location.href = '/admin.html';
+        window.location.replace('/admin.html');
       } else {
         // Estudiantes, instructores e instituciones van a su panel de aprendizaje.
-        window.location.href = '/dashboard.html';
+        window.location.replace('/dashboard.html');
       }
     }, 1400);
   } catch (e) {
@@ -275,7 +283,7 @@ function rolLabel(rol){
   if (tk && u && u.rol === 'administrador') {
     // Validar el token contra /me antes de redirigir
     fetch(API + '/api/auth/me', { headers: { Authorization: 'Bearer ' + tk } })
-      .then(r => { if (r.ok) window.location.href = '/admin.html'; });
+      .then(r => { if (r.ok) window.location.replace('/admin.html'); });
   }
 })();
 </script>

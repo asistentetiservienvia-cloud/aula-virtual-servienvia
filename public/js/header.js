@@ -10,12 +10,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if(loggedOut) loggedOut.style.display = 'none';
     if(loggedIn) {
       loggedIn.style.display = 'flex';
+      const iniciales = ((sesion.nombre[0]||'') + (sesion.nombre.split(' ')[1]?.[0]||'')).toUpperCase();
+      // Avatar mini (barra escritorio)
       const av = document.getElementById('hd-av');
-      if(av) av.textContent = ((sesion.nombre[0]||'') + (sesion.nombre.split(' ')[1]?.[0]||'')).toUpperCase();
+      if(av) av.textContent = iniciales;
+      // Bloque completo de usuario (solo móvil)
+      const userAv = document.getElementById('hd-user-av');
+      if(userAv) userAv.textContent = iniciales;
+      const userName = document.getElementById('hd-user-name');
+      if(userName) userName.textContent = sesion.nombre;
+      const userMail = document.getElementById('hd-user-mail');
+      if(userMail) userMail.textContent = sesion.correo;
+      const userRol = document.getElementById('hd-user-rol');
+      if(userRol) {
+        const rolLabel = {
+          administrador: 'Administrador',
+          estudiante: 'Estudiante',
+          instructor: 'Instructor',
+          institucion: 'Institución'
+        }[sesion.rol] || sesion.rol;
+        userRol.textContent = rolLabel;
+      }
       const link = document.getElementById('hd-av-link');
       if(link) {
         link.href = sesion.rol === 'administrador' ? '/admin.html' : '/dashboard.html';
-        link.innerHTML = `<div class="hd-av" id="hd-av">${av?av.textContent:'U'}</div> Mi Panel`;
+        link.innerHTML = `<div class="hd-av">${iniciales}</div> Mi Panel`;
       }
     }
   } else {
@@ -31,6 +50,44 @@ document.addEventListener('DOMContentLoaded', () => {
       nav.classList.toggle('open');
       const wrapper = document.querySelector('.hd-dropdown-wrapper');
       if(wrapper) wrapper.classList.toggle('open');
+    });
+
+    // Cerrar el menú móvil al tocar cualquier enlace del menú (D)
+    // Excepto el link "Explorar Cursos" que solo abre/cierra el sub-dropdown.
+    document.querySelectorAll('.hd-mobile-menu a').forEach(a => {
+      a.addEventListener('click', (e) => {
+        // Si es el toggle del dropdown "Explorar cursos", no cerrar el menú.
+        if(a.closest('.hd-dropdown-wrapper') && a.classList.contains('hd-link')) return;
+        // El resto de enlaces cierran el menú antes de navegar.
+        nav.classList.remove('open');
+        const wrapper = document.querySelector('.hd-dropdown-wrapper');
+        if(wrapper) wrapper.classList.remove('open');
+      });
+    });
+    // También cerrar al pulsar el botón de logout
+    const btnLogout = document.querySelector('.hd-mobile-menu .hd-logout');
+    if(btnLogout) {
+      btnLogout.addEventListener('click', () => {
+        nav.classList.remove('open');
+      });
+    }
+  }
+
+  // Dropdown "Explorar cursos": abrir/cerrar por clic (además del hover en escritorio)
+  const dropWrapper = document.querySelector('.hd-dropdown-wrapper');
+  if(dropWrapper) {
+    const dropLink = dropWrapper.querySelector('.hd-link');
+    if(dropLink) {
+      dropLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        dropWrapper.classList.toggle('open');
+      });
+    }
+    // Cerrar al hacer clic fuera del dropdown
+    document.addEventListener('click', (e) => {
+      if(!dropWrapper.contains(e.target)) {
+        dropWrapper.classList.remove('open');
+      }
     });
   }
 
@@ -69,5 +126,5 @@ document.addEventListener('DOMContentLoaded', () => {
 function hdLogout() {
   localStorage.removeItem('avs_token');
   localStorage.removeItem('avs_usuario');
-  window.location.href = '/login.html';
+  window.location.replace('/login.html');
 }
