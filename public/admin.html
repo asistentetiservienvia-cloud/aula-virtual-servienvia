@@ -47,6 +47,11 @@ button{font-family:inherit}
   color:var(--ink);cursor:pointer;flex-shrink:0
 }
 .hamburger-btn:hover{opacity:0.7}
+.close-sidebar-btn{
+  display:none;background:none;border:none;color:inherit;cursor:pointer;
+  padding:8px;border-radius:50%;align-items:center;justify-content:center;
+}
+.close-sidebar-btn:hover{background:rgba(255,255,255,0.1)}
 .admin-overlay{
   display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150;
   animation:fadeInOverlay .2s ease
@@ -162,6 +167,7 @@ tbody tr:hover{background:#faf8ff}
   }
   .sidebar.open{transform:translateX(0)}
   .hamburger-btn{display:inline-flex}
+  .close-sidebar-btn{display:inline-flex}
   .mobile-header { display: flex; }
 }
 </style>
@@ -175,7 +181,12 @@ tbody tr:hover{background:#faf8ff}
     </button>
   </div>
   <aside class="sidebar">
-    <a href="/dashboard.html" class="brand" style="text-decoration:none;"><span class="dot"></span>Aula Virtual</a>
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <a href="/dashboard.html" class="brand" style="text-decoration:none;"><span class="dot"></span>Aula Virtual</a>
+      <button class="close-sidebar-btn" onclick="cerrarAdminMenu()" aria-label="Cerrar menú">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
     <div class="nav-lbl">Administración</div>
     <nav class="nav">
       <a href="/dashboard.html"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Volver a mi panel</a>
